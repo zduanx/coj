@@ -9,8 +9,7 @@ import { NewProblemComponent } from './components/new-problem/new-problem.compon
 import { NavbarComponent } from './components/navbar/navbar.component';
 
 import { DataService } from './services/data.service';
-import { AppRoutingModule } from './/app-routing.module';
-
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
