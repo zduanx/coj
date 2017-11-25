@@ -3,4 +3,11 @@ export class Problem {
     name: string;
     desc: string;
     difficulty: string;
+
+    constructor(){
+        this.id = -1;
+        this.name = "";
+        this.desc = "";
+        this.difficulty = "";
+    }
 }

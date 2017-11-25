@@ -4,6 +4,8 @@ import { PROBLEMS } from '../mock-problems';
 
 @Injectable()
 export class DataService {
+  difficulties: string[] = ['easy', 'medium', 'hard', 'super'];
+  problems: Problem[] = PROBLEMS;
 
   constructor() { }
 
@@ -14,9 +16,18 @@ export class DataService {
 
   // get one problem
   getProblem(id: number): Problem {
-    return PROBLEMS.find( problem => problem.id === id);
+    return this.problems.find( problem => problem.id === id);
+  }
+
+  // get difficulties
+  getDifficulties(): string[]{
+    return this.difficulties;
   }
 
   // add problem
+  addProblem(problem: Problem){
+    problem.id = this.problems.length + 1;
+    this.problems.push(problem);
+  }
 
 }

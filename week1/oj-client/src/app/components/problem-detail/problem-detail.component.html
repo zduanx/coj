@@ -1,3 +1,13 @@
-<p>
-  problem-detail works!
-</p>
+<div class="container" *ngIf="problem">
+  <div class="col-sm-12 col-md-4">
+    <div>
+      <h2>
+        <!-- {{problem | json}} -->
+        {{problem.id}}. {{problem.name}}
+      </h2>
+      <p>
+        {{problem.detail}}
+      </p>
+    </div>
+  </div>
+</div>
