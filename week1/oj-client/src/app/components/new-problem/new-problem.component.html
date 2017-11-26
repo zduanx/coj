@@ -1,34 +1,57 @@
 <div class="container">
-  <form #formRef = "ngForm">
+  <!-- <p>{{newProblemForm.value | json}}</p> -->
+  <h2>New Problem</h2>
+  <form [formGroup]="newProblemForm" (ngSubmit)="addProblem()" #formDir="ngForm">
     <div class="form-group">
       <label for="problemName">Problem name</label>
-      <input name="problemName" id="problemName" class="form-control"
+      <input id="problemName" class="form-control"
         type="text" required placeholder="Please enter problem name"
-        [(ngModel)]="newProblem.name">
+        formControlName="name">
+      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+        <div *ngIf="name.errors.required">
+          Problem name is required.
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <label for="problemDesc">Problem description</label>
       <textarea name="problemDesc" id="problemDesc" class="form-control"
         type="text" required placeholder="Please enter problem description"
-        [(ngModel)]="newProblem.desc" rows="3"></textarea>
+        formControlName="desc" rows="3"></textarea>
+      <div *ngIf="desc.invalid && (desc.dirty || desc.touched)" class="alert alert-danger">
+        <div *ngIf="desc.errors.required">
+          Problem description is required.
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <label for="problemDifficulty">Difficulty</label>
       <select class="form-control" id="difficulty" name="difficulty"
-        [(ngModel)]="newProblem.difficulty">
+        formControlName="difficulty" required>
+        <option value="" disabled>Select Difficulty</option>
         <option *ngFor="let difficulty of difficulties" [value] = "difficulty">
           {{difficulty}}
         </option>
       </select>
+      <div *ngIf="difficulty.invalid && (difficulty.dirty || difficulty.touched)" class="alert alert-danger">
+        <div *ngIf="difficulty.errors.required">
+          Difficulty level is required.
+        </div>
+      </div>
     </div>
 
     <div class="row">
       <div class="col-md-12">
-        <button type="submit" class="btn btn-primary pull-right"
-          (click)="addProblem()">Add Problem</button>
+        <button type="button" class="btn btn-default"
+          (click)="goBack()">Back</button>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default reset-btn"
+            (click)="resetNewProblem()">Reset</button>
+          <button type="submit" class="btn btn-primary"
+            [disabled]="newProblemForm.invalid">Submit</button>
+          </div>
         </div>
     </div>
   </form>
 
-  <p>{{newProblem | json}}</p>
-</div>
+</div>>

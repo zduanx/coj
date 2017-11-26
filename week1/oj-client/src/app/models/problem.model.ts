@@ -5,7 +5,7 @@ export class Problem {
     difficulty: string;
 
     constructor(){
-        this.id = -1;
+        this.id = 0;
         this.name = "";
         this.desc = "";
         this.difficulty = "";
