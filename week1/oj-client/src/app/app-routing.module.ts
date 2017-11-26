@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProblemDetailComponent } from './components/problem-detail/problem-detail.component';
 import { ProblemListComponent } from './components/problem-list/problem-list.component';
 import { NewProblemComponent } from './components/new-problem/new-problem.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -24,8 +25,12 @@ const routes: Routes = [
     component: NewProblemComponent
   },
   {
+    path: 'not-found',
+    component: NotFoundComponent
+  },
+  {
     path: '**',
-    redirectTo: 'problems'
+    redirectTo: 'not-found'
   }
 ];
 

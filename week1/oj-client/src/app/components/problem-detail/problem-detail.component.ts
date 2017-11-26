@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { DataService } from '../../services/data.service';
 
@@ -17,7 +18,8 @@ export class ProblemDetailComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -26,8 +28,10 @@ export class ProblemDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.problem = this.dataService.getProblem(+params['id']);
     })
+    if(!this.problem){
+      this.router.navigate(['/not-found']);
+    }
   }
-
   
   goBack(){
     this.location.back();
