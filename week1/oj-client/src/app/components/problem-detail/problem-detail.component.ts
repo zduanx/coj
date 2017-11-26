@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { DataService } from '../../services/data.service';
 
@@ -15,6 +16,7 @@ export class ProblemDetailComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
+    private location: Location,
     private route: ActivatedRoute
   ) { }
 
@@ -24,6 +26,11 @@ export class ProblemDetailComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.problem = this.dataService.getProblem(+params['id']);
     })
+  }
+
+  
+  goBack(){
+    this.location.back();
   }
 
 }
