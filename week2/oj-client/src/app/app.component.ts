@@ -1,0 +1,13 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  ngOnInit() {
+    let body = document.getElementsByTagName('body')[0];
+    body.classList.add("body-navbar-fix");
+  }
+}
