@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Problem } from '../../models/problem.model';
 import { DataService } from '../../services/data.service';
 
+import { Subscription } from 'rxjs/Subscription';
+
 import { ProblemListFilterPipe } from '../../pipes/problem-list-filter.pipe';
+
+
 
 @Component({
   selector: 'app-problem-list',
@@ -16,6 +20,8 @@ export class ProblemListComponent implements OnInit {
   filterName: string;
   filterDiff: string;
 
+  subscriptionProblems: Subscription;
+
   constructor(
     private dataService: DataService
   ) { }
@@ -27,7 +33,13 @@ export class ProblemListComponent implements OnInit {
     this.filterDiff = "";
   }
 
+  ngOnDestroy() {
+    this.subscriptionProblems.unsubscribe();
+  }
+
   getProblems(): void {
-    this.problems = this.dataService.getProblems();
+    // this.problems = this.dataService.getProblems();
+    this.subscriptionProblems = this.dataService.getProblems()
+      .subscribe(problems => this.problems = problems);
   }
 }

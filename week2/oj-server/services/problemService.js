@@ -11,7 +11,6 @@ const getProblems = function(){
       if(err){
         reject(err);
       } else{
-        console.log(data);
         resolve(data);
       }
     });

@@ -26,8 +26,9 @@ export class ProblemDetailComponent implements OnInit {
     // angular.io demo method, Params import not needed
     // this.problem = this.dataService.getProblem(+this.route.snapshot.paramMap.get('id'));
     this.route.params.subscribe(params => {
-      this.problem = this.dataService.getProblem(+params['id']);
-    })
+      // this.problem = this.dataService.getProblem(+params['id']);
+      this.problem = new Problem();
+    }) 
     if(!this.problem){
       this.router.navigate(['/not-found']);
     }
