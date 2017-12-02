@@ -22,10 +22,10 @@ router.get('/problems/:id', (req, res) =>{
 router.post('/problems', jsonParser, (req, res) =>{
     problemService.addProblem(req.body)
         .then((problem) => {
-            res.json(problem)
+            res.json(problem);
         },
         (error) => {
-            res.status(400).send('Problem name already exists!')
+            res.status(400).send('Problem name already exists!');
         });
 });
 
