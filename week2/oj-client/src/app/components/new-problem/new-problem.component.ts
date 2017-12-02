@@ -37,7 +37,6 @@ export class NewProblemComponent implements OnInit {
 
   addProblem() {
     this.dataService.addProblem(this.newProblemForm.value);
-    // handle error
     this.router.navigate(['/problems']);
   }
 

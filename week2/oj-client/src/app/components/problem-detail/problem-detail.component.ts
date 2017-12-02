@@ -27,11 +27,18 @@ export class ProblemDetailComponent implements OnInit {
     // this.problem = this.dataService.getProblem(+this.route.snapshot.paramMap.get('id'));
     this.route.params.subscribe(params => {
       // this.problem = this.dataService.getProblem(+params['id']);
-      this.problem = new Problem();
-    }) 
-    if(!this.problem){
+      this.dataService.getProblem(+params['id'])
+      .then(res => {
+        this.problem = res;
+        if(!this.problem){
+          this.handleError();
+        }
+      });
+    })
+  }
+
+  handleError(){
       this.router.navigate(['/not-found']);
-    }
   }
   
   goBack(){

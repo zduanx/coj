@@ -1,12 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { Problem } from '../../models/problem.model';
 import { DataService } from '../../services/data.service';
 
-import { Subscription } from 'rxjs/Subscription';
-
 import { ProblemListFilterPipe } from '../../pipes/problem-list-filter.pipe';
-
-
 
 @Component({
   selector: 'app-problem-list',
