@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AuthGuard } from './auth.guard';
+
 import { ProblemDetailComponent } from './components/problem-detail/problem-detail.component';
 import { ProblemListComponent } from './components/problem-list/problem-list.component';
 import { NewProblemComponent } from './components/new-problem/new-problem.component';
@@ -15,7 +17,8 @@ const routes: Routes = [
   },
   {
     path: 'profiles',
-    component: ProfilesComponent
+    component: ProfilesComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'problems',
@@ -27,7 +30,8 @@ const routes: Routes = [
   },
   {
     path: 'new-problems',
-    component: NewProblemComponent
+    component: NewProblemComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'not-found',

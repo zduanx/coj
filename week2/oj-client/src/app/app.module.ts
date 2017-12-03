@@ -12,9 +12,11 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProfilesComponent } from './components/profiles/profiles.component';
 
 import { DataService } from './services/data.service';
-import { AuthService } from './services/auth.service';
 import { AppRoutingModule } from './app-routing.module';
 import { ProblemListFilterPipe } from './pipes/problem-list-filter.pipe';
+
+import { AuthService } from './services/auth.service';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,7 @@ import { ProblemListFilterPipe } from './pipes/problem-list-filter.pipe';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [DataService, AuthService],
+  providers: [DataService, AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
