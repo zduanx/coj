@@ -15,11 +15,11 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-left">
-          <li><a routerLink="/problems">Problems<span class="sr-only">(current)</span></a></li>
-          <li><a routerLink="/new-problems">Add Problem</a></li>
+          <li [routerLinkActive]="['active']"><a routerLink="/problems">Problems<span class="sr-only">(current)</span></a></li>
+          <li [routerLinkActive]="['active']"><a *ngIf="auth.isAuthenticated()" routerLink="/new-problems">Add Problem</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a routerLink="/profiles" *ngIf="auth.isAuthenticated()">Profile</a></li>
+          <li [routerLinkActive]="['active']"><a routerLink="/profiles" *ngIf="auth.isAuthenticated()">Profile</a></li>
           <li><a class="sign-in-class" *ngIf="!auth.isAuthenticated()" (click)=auth.login()>Sign in / Register</a></li>
           <li><a class="sign-in-class" *ngIf="auth.isAuthenticated()" (click)=auth.logout()>Log Out</a></li>
         </ul>
