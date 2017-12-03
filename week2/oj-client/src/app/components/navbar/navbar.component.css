@@ -1,0 +1,21 @@
+.sign-in-class{
+    color: #ffc107 !important;
+    text-align: center !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border-color: #ffc107 !important;
+    position: relative !important;
+    border: 1px solid  !important;
+    border-radius: .25rem !important;
+    padding: .375rem .75rem !important;
+    transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+    margin-top: 0.7em;
+    margin-bottom: 0.7em;
+    cursor: pointer !important;
+}
+
+a.sign-in-class:hover {
+    color: black !important;
+    background-color:  #ffc107 !important;
+    border-color: #ffc107 !important;
+}

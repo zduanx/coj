@@ -19,8 +19,8 @@
           <li><a routerLink="/new-problems">Add Problem</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a>Sign up</a></li>
-          <li><a>Login</a></li>
+          <li><a class="sign-in-class" *ngIf="!auth.isAuthenticated()" (click)=auth.login()>Sign in / Register</a></li>
+          <li><a class="sign-in-class" *ngIf="auth.isAuthenticated()" (click)=auth.logout()>Log Out</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

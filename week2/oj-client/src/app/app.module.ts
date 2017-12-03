@@ -11,6 +11,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 
 import { DataService } from './services/data.service';
+import { AuthService } from './services/auth.service';
 import { AppRoutingModule } from './app-routing.module';
 import { ProblemListFilterPipe } from './pipes/problem-list-filter.pipe';
 
@@ -31,7 +32,7 @@ import { ProblemListFilterPipe } from './pipes/problem-list-filter.pipe';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [DataService],
+  providers: [DataService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
