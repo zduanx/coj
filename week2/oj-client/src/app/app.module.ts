@@ -9,6 +9,7 @@ import { ProblemDetailComponent } from './components/problem-detail/problem-deta
 import { NewProblemComponent } from './components/new-problem/new-problem.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ProfilesComponent } from './components/profiles/profiles.component';
 
 import { DataService } from './services/data.service';
 import { AuthService } from './services/auth.service';
@@ -23,7 +24,8 @@ import { ProblemListFilterPipe } from './pipes/problem-list-filter.pipe';
     NewProblemComponent,
     NavbarComponent,
     NotFoundComponent,
-    ProblemListFilterPipe
+    ProblemListFilterPipe,
+    ProfilesComponent
   ],
   imports: [
     BrowserModule,

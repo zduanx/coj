@@ -5,12 +5,17 @@ import { ProblemDetailComponent } from './components/problem-detail/problem-deta
 import { ProblemListComponent } from './components/problem-list/problem-list.component';
 import { NewProblemComponent } from './components/new-problem/new-problem.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ProfilesComponent } from './components/profiles/profiles.component';
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: 'problems',
     pathMatch: 'full'
+  },
+  {
+    path: 'profiles',
+    component: ProfilesComponent
   },
   {
     path: 'problems',

@@ -28,6 +28,7 @@ webpackEmptyAsyncContext.id = "../../../../../src/$$_lazy_route_resource lazy re
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_problem_list_problem_list_component__ = __webpack_require__("../../../../../src/app/components/problem-list/problem-list.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_new_problem_new_problem_component__ = __webpack_require__("../../../../../src/app/components/new-problem/new-problem.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_not_found_not_found_component__ = __webpack_require__("../../../../../src/app/components/not-found/not-found.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_profiles_profiles_component__ = __webpack_require__("../../../../../src/app/components/profiles/profiles.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -40,11 +41,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var routes = [
     {
         path: '',
         redirectTo: 'problems',
         pathMatch: 'full'
+    },
+    {
+        path: 'profiles',
+        component: __WEBPACK_IMPORTED_MODULE_6__components_profiles_profiles_component__["a" /* ProfilesComponent */]
     },
     {
         path: 'problems',
@@ -173,16 +179,18 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_new_problem_new_problem_component__ = __webpack_require__("../../../../../src/app/components/new-problem/new-problem.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_navbar_navbar_component__ = __webpack_require__("../../../../../src/app/components/navbar/navbar.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_not_found_not_found_component__ = __webpack_require__("../../../../../src/app/components/not-found/not-found.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_data_service__ = __webpack_require__("../../../../../src/app/services/data.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__pipes_problem_list_filter_pipe__ = __webpack_require__("../../../../../src/app/pipes/problem-list-filter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_profiles_profiles_component__ = __webpack_require__("../../../../../src/app/components/profiles/profiles.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_data_service__ = __webpack_require__("../../../../../src/app/services/data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pipes_problem_list_filter_pipe__ = __webpack_require__("../../../../../src/app/pipes/problem-list-filter.pipe.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -209,16 +217,17 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_7__components_new_problem_new_problem_component__["a" /* NewProblemComponent */],
                 __WEBPACK_IMPORTED_MODULE_8__components_navbar_navbar_component__["a" /* NavbarComponent */],
                 __WEBPACK_IMPORTED_MODULE_9__components_not_found_not_found_component__["a" /* NotFoundComponent */],
-                __WEBPACK_IMPORTED_MODULE_13__pipes_problem_list_filter_pipe__["a" /* ProblemListFilterPipe */]
+                __WEBPACK_IMPORTED_MODULE_14__pipes_problem_list_filter_pipe__["a" /* ProblemListFilterPipe */],
+                __WEBPACK_IMPORTED_MODULE_10__components_profiles_profiles_component__["a" /* ProfilesComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_12__app_routing_module__["a" /* AppRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_13__app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* FormsModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* ReactiveFormsModule */],
                 __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["b" /* HttpClientModule */]
             ],
-            providers: [__WEBPACK_IMPORTED_MODULE_10__services_data_service__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_11__services_auth_service__["a" /* AuthService */]],
+            providers: [__WEBPACK_IMPORTED_MODULE_11__services_data_service__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_12__services_auth_service__["a" /* AuthService */]],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_4__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
@@ -237,7 +246,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".sign-in-class{\n    color: #ffc107 !important;\n    text-align: center !important;\n    background-color: transparent !important;\n    background-image: none !important;\n    border-color: #ffc107 !important;\n    position: relative !important;\n    border: 1px solid  !important;\n    border-radius: .25rem !important;\n    padding: .375rem .75rem !important;\n    transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n    margin-top: 0.7em;\n    margin-bottom: 0.7em;\n    cursor: pointer !important;\n}\n\na.sign-in-class:hover {\n    color: black !important;\n    background-color:  #ffc107 !important;\n    border-color: #ffc107 !important;\n}", ""]);
+exports.push([module.i, ".sign-in-class{\n    color: #ffc107 !important;\n    text-align: center !important;\n    background-color: transparent !important;\n    background-image: none !important;\n    border-color: #ffc107 !important;\n    position: relative !important;\n    border: 1px solid  !important;\n    border-radius: .25rem !important;\n    padding: .375rem .75rem !important;\n    transition: background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;\n    margin: 0.7em 1em;\n    cursor: pointer !important;\n}\n\na.sign-in-class:hover {\n    color: black !important;\n    background-color:  #ffc107 !important;\n    border-color: #ffc107 !important;\n}", ""]);
 
 // exports
 
@@ -250,7 +259,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-default navbar-fixed-top navbar-inverse\">\n  <div class=\"container\">\n    <div class=\"container-fluid\">\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\" aria-expanded=\"false\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"#\">COJ</a>\n      </div>\n  \n      <!-- Collect the nav links, forms, and other content for toggling -->\n      <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n        <ul class=\"nav navbar-nav navbar-left\">\n          <li><a routerLink=\"/problems\">Problems<span class=\"sr-only\">(current)</span></a></li>\n          <li><a routerLink=\"/new-problems\">Add Problem</a></li>\n        </ul>\n        <ul class=\"nav navbar-nav navbar-right\">\n          <li><a class=\"sign-in-class\" *ngIf=\"!auth.isAuthenticated()\" (click)=auth.login()>Sign in / Register</a></li>\n          <li><a class=\"sign-in-class\" *ngIf=\"auth.isAuthenticated()\" (click)=auth.logout()>Log Out</a></li>\n        </ul>\n      </div><!-- /.navbar-collapse -->\n    </div><!-- /.container-fluid -->\n  </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-default navbar-fixed-top navbar-inverse\">\n  <div class=\"container\">\n    <div class=\"container-fluid\">\n      <!-- Brand and toggle get grouped for better mobile display -->\n      <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#bs-example-navbar-collapse-1\" aria-expanded=\"false\">\n          <span class=\"sr-only\">Toggle navigation</span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n          <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"#\">COJ</a>\n      </div>\n  \n      <!-- Collect the nav links, forms, and other content for toggling -->\n      <div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">\n        <ul class=\"nav navbar-nav navbar-left\">\n          <li><a routerLink=\"/problems\">Problems<span class=\"sr-only\">(current)</span></a></li>\n          <li><a routerLink=\"/new-problems\">Add Problem</a></li>\n        </ul>\n        <ul class=\"nav navbar-nav navbar-right\">\n          <li><a routerLink=\"/profiles\" *ngIf=\"auth.isAuthenticated()\">Profile</a></li>\n          <li><a class=\"sign-in-class\" *ngIf=\"!auth.isAuthenticated()\" (click)=auth.login()>Sign in / Register</a></li>\n          <li><a class=\"sign-in-class\" *ngIf=\"auth.isAuthenticated()\" (click)=auth.logout()>Log Out</a></li>\n        </ul>\n      </div><!-- /.navbar-collapse -->\n    </div><!-- /.container-fluid -->\n  </div>\n</nav>"
 
 /***/ }),
 
@@ -642,6 +651,80 @@ var ProblemListComponent = (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/components/profiles/profiles.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".profile-area img {\n    max-width: 150px;\n    margin-bottom: 20px;\n  }\n  \n  .panel-body h3 {\n    margin-top: 0;\n  }", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/profiles/profiles.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n  <h2>Profile</h2>\n  <div class=\"row\">\n    <div class=\"col-md-2\">\n      <img src=\"{{profile?.picture}}\" class=\"img-circle\" >\n    </div>\n    <div class=\"col-md-10\">\n      <h3 class=\"nickname\">{{ profile?.nickname }}'s profile</h3>\n      <p>Email: {{profile?.name}}</p>\n      <p>Last Update: {{profile?.updated_at | date}}</p>\n    </div>\n  </div>\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/profiles/profiles.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProfilesComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ProfilesComponent = (function () {
+    function ProfilesComponent(auth) {
+        this.auth = auth;
+    }
+    ProfilesComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        if (this.auth.userProfile) {
+            this.profile = this.auth.userProfile;
+        }
+        else {
+            this.auth.getProfile(function (err, profile) {
+                _this.profile = profile;
+                console.log(_this.profile);
+            });
+        }
+    };
+    ProfilesComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: 'app-profiles',
+            template: __webpack_require__("../../../../../src/app/components/profiles/profiles.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/components/profiles/profiles.component.css")]
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */]])
+    ], ProfilesComponent);
+    return ProfilesComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/models/problem.model.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -728,8 +811,8 @@ var AuthService = (function () {
             domain: __WEBPACK_IMPORTED_MODULE_1__auth0_variables__["a" /* AUTH_CONFIG */].domain,
             responseType: 'token id_token',
             audience: "https://" + __WEBPACK_IMPORTED_MODULE_1__auth0_variables__["a" /* AUTH_CONFIG */].domain + "/userinfo",
-            redirectUri: 'http://localhost:3000',
-            scope: 'openid'
+            redirectUri: __WEBPACK_IMPORTED_MODULE_1__auth0_variables__["a" /* AUTH_CONFIG */].callbackURL,
+            scope: 'openid profile'
         });
     }
     AuthService.prototype.login = function () {
@@ -748,6 +831,19 @@ var AuthService = (function () {
                 console.log(err);
                 alert("Error: " + err.error + ". Check the console for further details.");
             }
+        });
+    };
+    AuthService.prototype.getProfile = function (cb) {
+        var accessToken = localStorage.getItem('access_token');
+        if (!accessToken) {
+            throw new Error('Access token must exist to fetch profile');
+        }
+        var self = this;
+        this.auth0.client.userInfo(accessToken, function (err, profile) {
+            if (profile) {
+                self.userProfile = profile;
+            }
+            cb(err, profile);
         });
     };
     AuthService.prototype.setSession = function (authResult) {
@@ -790,7 +886,7 @@ var AuthService = (function () {
 var AUTH_CONFIG = {
     clientID: '0BCGS9GmjMEPSo54Jx40H4Ze2V1JbeqW',
     domain: 'apocalypse.auth0.com',
-    callbackURL: 'http://localhost:4200'
+    callbackURL: 'http://localhost:3000'
 };
 
 

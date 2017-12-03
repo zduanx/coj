@@ -7,6 +7,6 @@ interface AuthConfig {
 export const AUTH_CONFIG: AuthConfig = {
   clientID: '0BCGS9GmjMEPSo54Jx40H4Ze2V1JbeqW',
   domain: 'apocalypse.auth0.com',
-  callbackURL: 'http://localhost:4200'
+  callbackURL: 'http://localhost:3000'
 };
   
