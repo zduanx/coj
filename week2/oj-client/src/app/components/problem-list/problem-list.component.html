@@ -2,6 +2,8 @@
   <div class="jumbotron">
     <h2>Collaborative Online Judge System</h2>
     <hr>
+    <p>{{loginInfo}}<p>
+    <p>{{sampleAccount}}<p>
   </div>
   <div class="row">
     <div class="col-sm-9">
@@ -25,6 +27,7 @@
         {{ problem.difficulty }}
       </span>
       <strong class="title"> {{ problem.id }} {{ problem.name}} </strong>
+      <!-- <span class="pull-right" *ngIf="auth.isAuthenticated()" (click)="deleteProblem($event, problem.id); false"><fa name="trash-o" size="2x" ></fa></span> -->
     </a>
   </div>
   <button routerLink="/new-problems" class="btn btn-default">Add Problem</button>
