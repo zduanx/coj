@@ -15,6 +15,7 @@ import { ProfilesComponent } from './components/profiles/profiles.component';
 import { ProblemEditorComponent } from './components/problem-editor/problem-editor.component';
 
 import { DataService } from './services/data.service';
+import { CollaborationService } from './services/collaboration.service';
 import { AppRoutingModule } from './app-routing.module';
 import { ProblemListFilterPipe } from './pipes/problem-list-filter.pipe';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
@@ -43,7 +44,12 @@ import { AuthGuard } from './auth.guard';
     HttpClientModule,
     AngularFontAwesomeModule
   ],
-  providers: [DataService, AuthService, AuthGuard],
+  providers: [
+    DataService,
+    CollaborationService,
+    AuthService, 
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

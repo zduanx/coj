@@ -187,17 +187,19 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_profiles_profiles_component__ = __webpack_require__("../../../../../src/app/components/profiles/profiles.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_problem_editor_problem_editor_component__ = __webpack_require__("../../../../../src/app/components/problem-editor/problem-editor.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_data_service__ = __webpack_require__("../../../../../src/app/services/data.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pipes_problem_list_filter_pipe__ = __webpack_require__("../../../../../src/app/pipes/problem-list-filter.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pipes_capitalize_pipe__ = __webpack_require__("../../../../../src/app/pipes/capitalize.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__auth_guard__ = __webpack_require__("../../../../../src/app/auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_collaboration_service__ = __webpack_require__("../../../../../src/app/services/collaboration.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pipes_problem_list_filter_pipe__ = __webpack_require__("../../../../../src/app/pipes/problem-list-filter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pipes_capitalize_pipe__ = __webpack_require__("../../../../../src/app/pipes/capitalize.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__auth_guard__ = __webpack_require__("../../../../../src/app/auth.guard.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -229,20 +231,25 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_8__components_new_problem_new_problem_component__["a" /* NewProblemComponent */],
                 __WEBPACK_IMPORTED_MODULE_9__components_navbar_navbar_component__["a" /* NavbarComponent */],
                 __WEBPACK_IMPORTED_MODULE_10__components_not_found_not_found_component__["a" /* NotFoundComponent */],
-                __WEBPACK_IMPORTED_MODULE_15__pipes_problem_list_filter_pipe__["a" /* ProblemListFilterPipe */],
+                __WEBPACK_IMPORTED_MODULE_16__pipes_problem_list_filter_pipe__["a" /* ProblemListFilterPipe */],
                 __WEBPACK_IMPORTED_MODULE_11__components_profiles_profiles_component__["a" /* ProfilesComponent */],
                 __WEBPACK_IMPORTED_MODULE_12__components_problem_editor_problem_editor_component__["a" /* ProblemEditorComponent */],
-                __WEBPACK_IMPORTED_MODULE_16__pipes_capitalize_pipe__["a" /* CapitalizePipe */]
+                __WEBPACK_IMPORTED_MODULE_17__pipes_capitalize_pipe__["a" /* CapitalizePipe */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_14__app_routing_module__["a" /* AppRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_15__app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* FormsModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* ReactiveFormsModule */],
                 __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["b" /* HttpClientModule */],
                 __WEBPACK_IMPORTED_MODULE_4_angular_font_awesome__["a" /* AngularFontAwesomeModule */]
             ],
-            providers: [__WEBPACK_IMPORTED_MODULE_13__services_data_service__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_17__services_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_18__auth_guard__["a" /* AuthGuard */]],
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_13__services_data_service__["a" /* DataService */],
+                __WEBPACK_IMPORTED_MODULE_14__services_collaboration_service__["a" /* CollaborationService */],
+                __WEBPACK_IMPORTED_MODULE_18__services_auth_service__["a" /* AuthService */],
+                __WEBPACK_IMPORTED_MODULE_19__auth_guard__["a" /* AuthGuard */]
+            ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
@@ -668,6 +675,8 @@ module.exports = "<section>\n  <header class=\"editor-header\">\n    <select cla
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProblemEditorComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_collaboration_service__ = __webpack_require__("../../../../../src/app/services/collaboration.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -678,10 +687,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var ProblemEditorComponent = (function () {
-    function ProblemEditorComponent() {
+    function ProblemEditorComponent(collaboration, route) {
+        this.collaboration = collaboration;
+        this.route = route;
     }
     ProblemEditorComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.params.subscribe(function (params) {
+            _this.sessionId = params['id'];
+            _this.initEditor();
+            _this.collaboration.restoreBuffer();
+        });
+    };
+    ProblemEditorComponent.prototype.initEditor = function () {
+        var _this = this;
         this.languages = ['java', 'python'];
         this.themes = ['eclipse', 'tomorrow', 'xcode'];
         this.defaultContent = {
@@ -692,19 +714,30 @@ var ProblemEditorComponent = (function () {
         this.theme = this.themes[0];
         this.editor = ace.edit("editor");
         this.editor.$blockScrolling = Infinity;
-        this.editor.getSession().setMode("ace/mode/" + this.language);
         this.resetEditor();
+        // setup collabration socket
+        this.collaboration.init(this.editor, this.sessionId);
+        this.editor.lastAppliedChange = null;
+        // register change callback
+        this.editor.on('change', function (e) {
+            // console.log('editor change'+ JSON.stringify(e));
+            if (_this.editor.lastAppliedChange != e) {
+                _this.collaboration.change(JSON.stringify(e));
+            }
+        });
     };
     ProblemEditorComponent.prototype.resetEditor = function () {
         this.editor.setTheme("ace/theme/" + this.theme);
+        this.editor.getSession().setMode("ace/mode/" + this.language);
         this.editor.setValue(this.defaultContent["" + this.language]);
     };
     ProblemEditorComponent.prototype.setLanguage = function () {
-        console.log(this.language);
-        this.editor.getSession().setMode("ace/mode/" + this.language);
+        this.resetEditor();
     };
     ProblemEditorComponent.prototype.setTheme = function () {
+        var userCode = this.editor.getValue();
         this.editor.setTheme("ace/theme/" + this.theme);
+        this.editor.setValue(userCode);
     };
     ProblemEditorComponent.prototype.submit = function () {
         var userCode = this.editor.getValue();
@@ -716,7 +749,8 @@ var ProblemEditorComponent = (function () {
             template: __webpack_require__("../../../../../src/app/components/problem-editor/problem-editor.component.html"),
             styles: [__webpack_require__("../../../../../src/app/components/problem-editor/problem-editor.component.css")],
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_collaboration_service__["a" /* CollaborationService */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */]])
     ], ProblemEditorComponent);
     return ProblemEditorComponent;
 }());
@@ -1084,6 +1118,54 @@ var AUTH_CONFIG = {
     domain: 'apocalypse.auth0.com',
     callbackURL: 'http://localhost:3000'
 };
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/collaboration.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CollaborationService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var CollaborationService = (function () {
+    function CollaborationService() {
+    }
+    CollaborationService.prototype.init = function (editor, sessionId) {
+        this.collaborationSocket = io(window.location.origin, { query: 'sessionId=' + sessionId });
+        // this.collaborationSocket.on('message', (message)=>{
+        //   console.log('message received from server: ' + message);
+        // })
+        this.collaborationSocket.on('change', function (delta) {
+            delta = JSON.parse(delta);
+            editor.lastAppliedChange = delta;
+            //  console.log('received from server' + delta);
+            editor.getSession().getDocument().applyDeltas([delta]);
+        });
+    };
+    CollaborationService.prototype.change = function (delta) {
+        this.collaborationSocket.emit('change', delta);
+    };
+    CollaborationService.prototype.restoreBuffer = function () {
+        this.collaborationSocket.emit('restoreBuffer');
+    };
+    CollaborationService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [])
+    ], CollaborationService);
+    return CollaborationService;
+}());
+
 
 
 /***/ }),
