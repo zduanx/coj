@@ -185,17 +185,21 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_navbar_navbar_component__ = __webpack_require__("../../../../../src/app/components/navbar/navbar.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_not_found_not_found_component__ = __webpack_require__("../../../../../src/app/components/not-found/not-found.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_profiles_profiles_component__ = __webpack_require__("../../../../../src/app/components/profiles/profiles.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_data_service__ = __webpack_require__("../../../../../src/app/services/data.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pipes_problem_list_filter_pipe__ = __webpack_require__("../../../../../src/app/pipes/problem-list-filter.pipe.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__auth_guard__ = __webpack_require__("../../../../../src/app/auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_problem_editor_problem_editor_component__ = __webpack_require__("../../../../../src/app/components/problem-editor/problem-editor.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_data_service__ = __webpack_require__("../../../../../src/app/services/data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__pipes_problem_list_filter_pipe__ = __webpack_require__("../../../../../src/app/pipes/problem-list-filter.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pipes_capitalize_pipe__ = __webpack_require__("../../../../../src/app/pipes/capitalize.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__auth_guard__ = __webpack_require__("../../../../../src/app/auth.guard.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -225,18 +229,20 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_8__components_new_problem_new_problem_component__["a" /* NewProblemComponent */],
                 __WEBPACK_IMPORTED_MODULE_9__components_navbar_navbar_component__["a" /* NavbarComponent */],
                 __WEBPACK_IMPORTED_MODULE_10__components_not_found_not_found_component__["a" /* NotFoundComponent */],
-                __WEBPACK_IMPORTED_MODULE_14__pipes_problem_list_filter_pipe__["a" /* ProblemListFilterPipe */],
-                __WEBPACK_IMPORTED_MODULE_11__components_profiles_profiles_component__["a" /* ProfilesComponent */]
+                __WEBPACK_IMPORTED_MODULE_15__pipes_problem_list_filter_pipe__["a" /* ProblemListFilterPipe */],
+                __WEBPACK_IMPORTED_MODULE_11__components_profiles_profiles_component__["a" /* ProfilesComponent */],
+                __WEBPACK_IMPORTED_MODULE_12__components_problem_editor_problem_editor_component__["a" /* ProblemEditorComponent */],
+                __WEBPACK_IMPORTED_MODULE_16__pipes_capitalize_pipe__["a" /* CapitalizePipe */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_13__app_routing_module__["a" /* AppRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_14__app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* FormsModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["d" /* ReactiveFormsModule */],
                 __WEBPACK_IMPORTED_MODULE_3__angular_common_http__["b" /* HttpClientModule */],
                 __WEBPACK_IMPORTED_MODULE_4_angular_font_awesome__["a" /* AngularFontAwesomeModule */]
             ],
-            providers: [__WEBPACK_IMPORTED_MODULE_12__services_data_service__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_15__services_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_16__auth_guard__["a" /* AuthGuard */]],
+            providers: [__WEBPACK_IMPORTED_MODULE_13__services_data_service__["a" /* DataService */], __WEBPACK_IMPORTED_MODULE_17__services_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_18__auth_guard__["a" /* AuthGuard */]],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_5__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
@@ -558,7 +564,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-detail/problem-detail.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <h2>\n    {{problem.id}}. {{problem.name}}\n  </h2>\n  <div class=\"{{ 'pull-left label diff-' + problem.difficulty.toLowerCase() }}\">\n      {{ problem.difficulty }}\n  </div>\n  <br>\n\n  <div class=\"row\">\n    <div class=\"col-sm-12 col-md-6\">\n      <div>\n        <h2>Description</h2>\n        <p>\n          {{problem.desc}}\n        </p>\n      </div>\n    </div>\n    <div class=\"col-sm-12 col-md-6\">\n      <div>\n        <h2>Answers</h2>\n        <textarea class=\"answer-text\" row=\"50\"></textarea>\n      </div>\n    </div>\n  </div>\n\n  <br>\n  <div>\n    <button type=\"button\" class=\"btn btn-default\" (click)=\"goBack()\">Back</button>\n    <button type=\"button\" class=\"btn btn-default pull-right\" [disabled]=\"true\">submit</button>\n  </div>\n</div>"
+module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <h2>\n    {{problem.id}}. {{problem.name}}\n  </h2>\n  <div class=\"{{ 'pull-left label diff-' + problem.difficulty.toLowerCase() }}\">\n      {{ problem.difficulty }}\n  </div>\n  <br>\n\n  <div class=\"row\">\n    <div class=\"col-sm-12 col-md-6\">\n      <div>\n        <h2>Description\n        </h2>\n        <p>\n          {{problem.desc}}\n        </p>\n      </div>\n    </div>\n    <div class=\"hidden-xs col-sm-12 col-md-6\">\n      <app-problem-editor></app-problem-editor>\n    </div>\n  </div>\n\n</div>"
 
 /***/ }),
 
@@ -625,6 +631,94 @@ var ProblemDetailComponent = (function () {
             __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]])
     ], ProblemDetailComponent);
     return ProblemDetailComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/problem-editor/problem-editor.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "@media screen {\n    #editor{\n        height: 600px;\n    }\n    .lang-select{\n        max-width: 100px;\n        margin-right: 10px;\n    }\n\n    header .btn {\n        margin: 0 5px;\n    }\n\n    footer .btn {\n        margin: 0 5px;\n    }\n\n    .editor-footer, .editor-header{\n        margin: 10px 0;\n    }\n\n    .cursor{\n        background:rgba(0, 250, 0, 0.5);\n        z-index: 40;\n        width: 2px !important\n    }\n}\n", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/problem-editor/problem-editor.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<section>\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left lang-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left lang-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-primary btn-lg\" data-toggle=\"modal\" data-target=\"#myModal\">\n      reset\n    </button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetEditor()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"row\">\n    <div id=\"editor\"></div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</section>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/problem-editor/problem-editor.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProblemEditorComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ProblemEditorComponent = (function () {
+    function ProblemEditorComponent() {
+    }
+    ProblemEditorComponent.prototype.ngOnInit = function () {
+        this.languages = ['java', 'python'];
+        this.themes = ['eclipse', 'tomorrow', 'xcode'];
+        this.defaultContent = {
+            'java': "public class Solution{",
+            'python': "class Solution:"
+        };
+        this.language = this.languages[0];
+        this.theme = this.themes[0];
+        this.editor = ace.edit("editor");
+        this.editor.$blockScrolling = Infinity;
+        this.editor.getSession().setMode("ace/mode/" + this.language);
+        this.resetEditor();
+    };
+    ProblemEditorComponent.prototype.resetEditor = function () {
+        this.editor.setTheme("ace/theme/" + this.theme);
+        this.editor.setValue(this.defaultContent["" + this.language]);
+    };
+    ProblemEditorComponent.prototype.setLanguage = function () {
+        console.log(this.language);
+        this.editor.getSession().setMode("ace/mode/" + this.language);
+    };
+    ProblemEditorComponent.prototype.setTheme = function () {
+        this.editor.setTheme("ace/theme/" + this.theme);
+    };
+    ProblemEditorComponent.prototype.submit = function () {
+        var userCode = this.editor.getValue();
+        console.log(userCode);
+    };
+    ProblemEditorComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: 'app-problem-editor',
+            template: __webpack_require__("../../../../../src/app/components/problem-editor/problem-editor.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/components/problem-editor/problem-editor.component.css")],
+        }),
+        __metadata("design:paramtypes", [])
+    ], ProblemEditorComponent);
+    return ProblemEditorComponent;
 }());
 
 
@@ -807,6 +901,41 @@ var Problem = (function () {
     return Problem;
 }());
 
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/pipes/capitalize.pipe.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CapitalizePipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var CapitalizePipe = (function () {
+    function CapitalizePipe() {
+    }
+    CapitalizePipe.prototype.transform = function (value, args) {
+        if (value) {
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        }
+        return value;
+    };
+    CapitalizePipe = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["T" /* Pipe */])({
+            name: 'capitalize'
+        })
+    ], CapitalizePipe);
+    return CapitalizePipe;
+}());
+
+// ng g pipes CapitalizePipe
 
 
 /***/ }),

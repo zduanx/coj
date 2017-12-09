@@ -12,10 +12,12 @@ import { NewProblemComponent } from './components/new-problem/new-problem.compon
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProfilesComponent } from './components/profiles/profiles.component';
+import { ProblemEditorComponent } from './components/problem-editor/problem-editor.component';
 
 import { DataService } from './services/data.service';
 import { AppRoutingModule } from './app-routing.module';
 import { ProblemListFilterPipe } from './pipes/problem-list-filter.pipe';
+import { CapitalizePipe } from './pipes/capitalize.pipe';
 
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './auth.guard';
@@ -29,7 +31,9 @@ import { AuthGuard } from './auth.guard';
     NavbarComponent,
     NotFoundComponent,
     ProblemListFilterPipe,
-    ProfilesComponent
+    ProfilesComponent,
+    ProblemEditorComponent,
+    CapitalizePipe
   ],
   imports: [
     BrowserModule,

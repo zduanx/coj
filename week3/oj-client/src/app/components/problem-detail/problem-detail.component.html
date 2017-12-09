@@ -10,23 +10,16 @@
   <div class="row">
     <div class="col-sm-12 col-md-6">
       <div>
-        <h2>Description</h2>
+        <h2>Description
+        </h2>
         <p>
           {{problem.desc}}
         </p>
       </div>
     </div>
-    <div class="col-sm-12 col-md-6">
-      <div>
-        <h2>Answers</h2>
-        <textarea class="answer-text" row="50"></textarea>
-      </div>
+    <div class="hidden-xs col-sm-12 col-md-6">
+      <app-problem-editor></app-problem-editor>
     </div>
   </div>
 
-  <br>
-  <div>
-    <button type="button" class="btn btn-default" (click)="goBack()">Back</button>
-    <button type="button" class="btn btn-default pull-right" [disabled]="true">submit</button>
-  </div>
 </div>

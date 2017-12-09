@@ -26,7 +26,13 @@
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
         "../node_modules/bootstrap/dist/js/bootstrap.min.js",
-        "../node_modules/auth0-js/build/auth0.min.js"
+        "../node_modules/auth0-js/build/auth0.min.js",
+        "../node_modules/ace-builds/src-min-noconflict/ace.js",
+        "../node_modules/ace-builds/src-min-noconflict/theme-tomorrow.js",
+        "../node_modules/ace-builds/src-min-noconflict/theme-eclipse.js",
+        "../node_modules/ace-builds/src-min-noconflict/theme-xcode.js",
+        "../node_modules/ace-builds/src-min-noconflict/mode-python.js",
+        "../node_modules/ace-builds/src-min-noconflict/mode-java.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
