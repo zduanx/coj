@@ -879,7 +879,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/profiles/profiles.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <h2>Profile</h2>\n  <div class=\"row\">\n    <div class=\"col-md-2\">\n      <img [src]=\"profile?.picture\" class=\"img-circle\" [style.width.%]=\"100\" >\n    </div>\n    <div class=\"col-md-10\">\n      <h3 class=\"nickname\">{{ profile?.nickname }}'s profile</h3>\n      <p>Email: {{profile?.name}}</p>\n      <p>Last Update: {{profile?.updated_at | date}}</p>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"container\">\n  <h2>Profile</h2>\n  <div class=\"row\">\n    <div class=\"col-md-2\">\n      <img [src]=\"profile?.picture\" class=\"img-circle\" [style.width.%]=\"100\" >\n    </div>\n    <div class=\"col-md-10\">\n      <h3 class=\"nickname\">{{ profile?.nickname }}'s profile</h3>\n      <p>Name: {{profile?.name}}</p>\n      <p>Last Update: {{profile?.updated_at | date}}</p>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
