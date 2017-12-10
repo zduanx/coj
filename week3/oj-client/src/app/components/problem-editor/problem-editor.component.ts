@@ -68,13 +68,20 @@ export class ProblemEditorComponent implements OnInit {
       if(this.editor.lastAppliedChange != e && !this.changeGuard){
         this.collaboration.change(JSON.stringify(e));
       }
-    })
+    });
+    // register cursor move
+    this.editor.getSession().getSelection().on('changeCursor', ()=> {
+      const cursor = this.editor.getSession().getSelection().getCursor();
+      // console.log('curser move log from client ' + JSON.stringify(cursor));
+      this.collaboration.cursorMove(JSON.stringify(cursor));
+    });
   }
 
   initResetEditor(){
     this.editor.setTheme(`ace/theme/${this.theme}`);
     this.editor.getSession().setMode(`ace/mode/${this.language}`);
     this.editor.setValue(this.defaultContent[`${this.language}`]);
+    this.editor.clearSelection();
   }
 
   resetPage(){

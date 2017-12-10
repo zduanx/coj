@@ -43,17 +43,9 @@ module.exports = function(io) {
             const sessionId = socketIdToSessionId[socket.id];
             if(sessionId in collaborations){
                 collaborations[sessionId]['cachedInstructions'].push(['change', delta, Date.now()]);
+            }
 
-                const participants = collaborations[sessionId]['participants'];
-                for(let participant of participants){
-                    if(socket.id !== participant){
-                        io.to(participant).emit('change', delta);
-                    }
-                }
-            }
-            else{
-                console.error('error');
-            }
+            forwardEvent(socket.id, 'change', delta);
         });
 
         // when user reset code, reset buffer
@@ -63,6 +55,14 @@ module.exports = function(io) {
             if(sessionId in collaborations){
                 collaborations[sessionId]['cachedInstructions'] = [];
             }
+        });
+        
+        // from payson
+        socket.on('cursorMove', cursor => {
+            // console.log('>> editorSocketService: cursor move for session: ' + socketIdToSessionId[socket.id] + ', socketId:' + socket.id);
+            cursor = JSON.parse(cursor);
+            cursor['socketId'] = socket.id;
+            forwardEvent(socket.id, 'cursorMove', JSON.stringify(cursor));
         });
 
         socket.on('restoreBuffer', ()=>{
@@ -76,6 +76,7 @@ module.exports = function(io) {
         });
 
         socket.on('disconnect', () =>{
+            forwardEvent(socket.id, 'cursorDelete', socket.id);
             const sessionId = socketIdToSessionId[socket.id];
             let foundAndRemove = false;
             if(sessionId in collaborations){
@@ -100,4 +101,19 @@ module.exports = function(io) {
             }
         });
     });
+
+    // from payson
+    const forwardEvent = function(socketId, eventName, dataString) {
+        const sessionId = socketIdToSessionId[socketId];
+        if (sessionId in collaborations) {
+            const participants = collaborations[sessionId]['participants'];
+            for(let participant of participants) {
+                if (socketId != participant) {
+                    io.to(participant).emit(eventName, dataString);
+                }
+            }
+        } else {
+            console.warn('<< editorSocketService --- WARNING: sessionId should exist');
+        }
+    }
 }

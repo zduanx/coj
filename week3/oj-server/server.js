@@ -19,7 +19,7 @@ app.use('/', indexRouter);
 app.use('/api/v1', restRouter);
 
 app.use((req, res) => {
-    console.log("other case");
+    console.log(">> server: other case routing, back to browser");
     res.sendFile('index.html', {root: path.join(__dirname, '../public/')});
 });
 
