@@ -2,7 +2,7 @@
     #editor{
         height: 600px;
     }
-    .lang-select{
+    .option-select{
         max-width: 100px;
         margin-right: 10px;
     }
@@ -23,5 +23,9 @@
         background:rgba(0, 250, 0, 0.5);
         z-index: 40;
         width: 2px !important
+    }
+    .editor-css{
+        margin-left: 0px !important;
+        margin-right: 0px !important;
     }
 }

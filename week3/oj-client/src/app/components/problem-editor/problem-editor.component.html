@@ -1,21 +1,21 @@
 <section>
   <header class="editor-header">
-    <select class="form-control pull-left lang-select" name="language"
+    <select class="form-control pull-left option-select" name="language"
     [(ngModel)]="language" (change)="setLanguage()">
       <option *ngFor="let language of languages" [value]="language" >
         {{language | capitalize}}
       </option>
     </select>
 
-    <select class="form-control pull-left lang-select" name="theme"
+    <select class="form-control pull-left option-select" name="theme"
     [(ngModel)]="theme" (change)="setTheme()">
       <option *ngFor="let theme of themes" [value]="theme">
         {{theme | capitalize }}
       </option>
     </select>
 
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-      reset
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+      <fa name="refresh" size="1x" ></fa>
     </button>
 
     <!-- Modal -->
@@ -35,7 +35,7 @@
   </header>
   
 
-  <div class="row">
+  <div class="editor-css row">
     <div id="editor"></div>
   </div>
   <footer class="editor-footer">
