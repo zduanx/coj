@@ -665,7 +665,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-editor/problem-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section>\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left lang-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left lang-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-primary btn-lg\" data-toggle=\"modal\" data-target=\"#myModal\">\n      reset\n    </button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetEditor()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"row\">\n    <div id=\"editor\"></div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</section>"
+module.exports = "<section>\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left lang-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left lang-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-primary btn-lg\" data-toggle=\"modal\" data-target=\"#myModal\">\n      reset\n    </button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"row\">\n    <div id=\"editor\"></div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</section>"
 
 /***/ }),
 
@@ -698,12 +698,14 @@ var ProblemEditorComponent = (function () {
         var _this = this;
         this.route.params.subscribe(function (params) {
             _this.sessionId = params['id'];
+            _this.initParam();
             _this.initEditor();
+            _this.initSocket();
             _this.collaboration.restoreBuffer();
         });
     };
-    ProblemEditorComponent.prototype.initEditor = function () {
-        var _this = this;
+    ProblemEditorComponent.prototype.initParam = function () {
+        this.changeGuard = false;
         this.languages = ['java', 'python'];
         this.themes = ['eclipse', 'tomorrow', 'xcode'];
         this.defaultContent = {
@@ -712,32 +714,42 @@ var ProblemEditorComponent = (function () {
         };
         this.language = this.languages[0];
         this.theme = this.themes[0];
+    };
+    ProblemEditorComponent.prototype.initEditor = function () {
         this.editor = ace.edit("editor");
         this.editor.$blockScrolling = Infinity;
-        this.resetEditor();
+        this.initResetEditor();
+    };
+    ProblemEditorComponent.prototype.initSocket = function () {
+        var _this = this;
         // setup collabration socket
         this.collaboration.init(this.editor, this.sessionId);
         this.editor.lastAppliedChange = null;
         // register change callback
         this.editor.on('change', function (e) {
-            // console.log('editor change'+ JSON.stringify(e));
-            if (_this.editor.lastAppliedChange != e) {
+            if (_this.editor.lastAppliedChange != e && !_this.changeGuard) {
                 _this.collaboration.change(JSON.stringify(e));
             }
         });
     };
-    ProblemEditorComponent.prototype.resetEditor = function () {
+    ProblemEditorComponent.prototype.initResetEditor = function () {
         this.editor.setTheme("ace/theme/" + this.theme);
         this.editor.getSession().setMode("ace/mode/" + this.language);
         this.editor.setValue(this.defaultContent["" + this.language]);
     };
+    ProblemEditorComponent.prototype.resetPage = function () {
+        this.initResetEditor();
+        this.collaboration.reset();
+    };
     ProblemEditorComponent.prototype.setLanguage = function () {
-        this.resetEditor();
+        this.resetPage();
     };
     ProblemEditorComponent.prototype.setTheme = function () {
         var userCode = this.editor.getValue();
+        this.changeGuard = true;
         this.editor.setTheme("ace/theme/" + this.theme);
         this.editor.setValue(userCode);
+        this.changeGuard = false;
     };
     ProblemEditorComponent.prototype.submit = function () {
         var userCode = this.editor.getValue();
@@ -1143,9 +1155,6 @@ var CollaborationService = (function () {
     }
     CollaborationService.prototype.init = function (editor, sessionId) {
         this.collaborationSocket = io(window.location.origin, { query: 'sessionId=' + sessionId });
-        // this.collaborationSocket.on('message', (message)=>{
-        //   console.log('message received from server: ' + message);
-        // })
         this.collaborationSocket.on('change', function (delta) {
             delta = JSON.parse(delta);
             editor.lastAppliedChange = delta;
@@ -1158,6 +1167,9 @@ var CollaborationService = (function () {
     };
     CollaborationService.prototype.restoreBuffer = function () {
         this.collaborationSocket.emit('restoreBuffer');
+    };
+    CollaborationService.prototype.reset = function () {
+        this.collaborationSocket.emit('reset');
     };
     CollaborationService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),

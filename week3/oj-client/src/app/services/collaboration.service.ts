@@ -10,10 +10,6 @@ export class CollaborationService {
   init(editor: any, sessionId: string): void{
     this.collaborationSocket = io(window.location.origin, {query: 'sessionId=' + sessionId});
 
-    // this.collaborationSocket.on('message', (message)=>{
-    //   console.log('message received from server: ' + message);
-    // })
-
     this.collaborationSocket.on('change', (delta: string) => {
       delta = JSON.parse(delta);
       editor.lastAppliedChange = delta;
@@ -28,5 +24,9 @@ export class CollaborationService {
 
   restoreBuffer(): void {
     this.collaborationSocket.emit('restoreBuffer');
+  }
+
+  reset(): void {
+    this.collaborationSocket.emit('reset');
   }
 }

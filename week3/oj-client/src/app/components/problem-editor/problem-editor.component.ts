@@ -20,6 +20,7 @@ export class ProblemEditorComponent implements OnInit {
   language: string;
   theme: string;
   sessionId: string;
+  changeGuard: boolean;
 
   constructor(
     private collaboration: CollaborationService,
@@ -29,14 +30,17 @@ export class ProblemEditorComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.sessionId = params['id'];
+      this.initParam();
       this.initEditor();
+      this.initSocket();
       this.collaboration.restoreBuffer();
     });
 
 
   }
 
-  initEditor(): void {
+  initParam(): void {
+    this.changeGuard = false;
     this.languages = ['java', 'python'];
     this.themes = ['eclipse', 'tomorrow', 'xcode'];
     this.defaultContent = {
@@ -46,38 +50,48 @@ export class ProblemEditorComponent implements OnInit {
 
     this.language = this.languages[0];
     this.theme = this.themes[0];
+  }
 
+  initEditor(): void {
     this.editor = ace.edit("editor");
     this.editor.$blockScrolling = Infinity;
-    this.resetEditor();
-    
+    this.initResetEditor();
+  }
+
+  initSocket(){
     // setup collabration socket
     this.collaboration.init(this.editor, this.sessionId);
     this.editor.lastAppliedChange = null;
 
     // register change callback
     this.editor.on('change', (e)=>{
-      // console.log('editor change'+ JSON.stringify(e));
-      if(this.editor.lastAppliedChange != e){
+      if(this.editor.lastAppliedChange != e && !this.changeGuard){
         this.collaboration.change(JSON.stringify(e));
       }
     })
   }
 
-  resetEditor(){
+  initResetEditor(){
     this.editor.setTheme(`ace/theme/${this.theme}`);
     this.editor.getSession().setMode(`ace/mode/${this.language}`);
     this.editor.setValue(this.defaultContent[`${this.language}`]);
   }
 
+  resetPage(){
+    this.initResetEditor();
+    this.collaboration.reset();
+  }
+
   setLanguage() {
-    this.resetEditor();
+    this.resetPage();
   }
 
   setTheme() {
     const userCode = this.editor.getValue();
+    this.changeGuard = true;
     this.editor.setTheme(`ace/theme/${this.theme}`);
     this.editor.setValue(userCode);
+    this.changeGuard = false;
   }
 
   submit(){
