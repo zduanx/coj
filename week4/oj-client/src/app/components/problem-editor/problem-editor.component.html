@@ -1,0 +1,45 @@
+<section>
+  <header class="editor-header">
+    <select class="form-control pull-left option-select" name="language"
+    [(ngModel)]="language" (change)="setLanguage()">
+      <option *ngFor="let language of languages" [value]="language" >
+        {{language | capitalize}}
+      </option>
+    </select>
+
+    <select class="form-control pull-left option-select" name="theme"
+    [(ngModel)]="theme" (change)="setTheme()">
+      <option *ngFor="let theme of themes" [value]="theme">
+        {{theme | capitalize }}
+      </option>
+    </select>
+
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
+      <fa name="refresh" size="1x" ></fa>
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            You will lose current code in editor, are you sure?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="resetPage()">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+
+  <div class="editor-css row">
+    <div id="editor"></div>
+  </div>
+  <footer class="editor-footer">
+    <button type="button" class = "btn btn-success pull-right"
+    (click)="submit()">Submit Solution</button>
+  </footer>
+</section>
