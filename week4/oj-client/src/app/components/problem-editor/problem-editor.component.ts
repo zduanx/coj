@@ -23,7 +23,8 @@ export class ProblemEditorComponent implements OnInit {
   sessionId: string;
   changeGuard: boolean;
 
-  output: string = '';
+  buildoutput: string = '';
+  runoutput: string = '';
 
   constructor(
     private collaboration: CollaborationService,
@@ -113,7 +114,8 @@ export class ProblemEditorComponent implements OnInit {
 
     this.dataService.buildAndRun(data)
       .then((res) => {
-        this.output = res.text;
+        this.buildoutput = res.buildtext;
+        this.runoutput = res.runtext;
       })
       .catch( err =>
         window.alert(err)
