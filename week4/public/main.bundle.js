@@ -441,8 +441,14 @@ var NewProblemComponent = (function () {
         this.resetNewProblem();
     };
     NewProblemComponent.prototype.addProblem = function () {
-        this.dataService.addProblem(this.newProblemForm.value);
-        this.router.navigate(['/problems']);
+        var _this = this;
+        this.dataService.addProblem(this.newProblemForm.value)
+            .then(function () {
+            _this.router.navigate(['/problems']);
+        })
+            .catch(function (err) {
+            window.alert(err);
+        });
     };
     NewProblemComponent.prototype.resetNewProblem = function () {
         // when using reactive form, we should use newProblemForm.value
@@ -665,7 +671,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-editor/problem-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section>\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</section>"
+module.exports = "<section>\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n    <h4>Build Results:</h4>\n    <div>\n      {{output}}\n    </div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</section>"
 
 /***/ }),
 
@@ -676,7 +682,8 @@ module.exports = "<section>\n  <header class=\"editor-header\">\n    <select cla
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProblemEditorComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_collaboration_service__ = __webpack_require__("../../../../../src/app/services/collaboration.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_data_service__ = __webpack_require__("../../../../../src/app/services/data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -689,10 +696,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ProblemEditorComponent = (function () {
-    function ProblemEditorComponent(collaboration, route) {
+    function ProblemEditorComponent(collaboration, dataService, route) {
         this.collaboration = collaboration;
+        this.dataService = dataService;
         this.route = route;
+        this.output = '';
     }
     ProblemEditorComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -756,11 +766,23 @@ var ProblemEditorComponent = (function () {
         this.changeGuard = true;
         this.editor.setTheme("ace/theme/" + this.theme);
         this.editor.setValue(userCode);
+        this.editor.clearSelection();
         this.changeGuard = false;
     };
     ProblemEditorComponent.prototype.submit = function () {
-        var userCode = this.editor.getValue();
-        console.log(userCode);
+        var _this = this;
+        var userCodes = this.editor.getValue();
+        var data = {
+            userCodes: userCodes,
+            lang: this.language.toLocaleLowerCase()
+        };
+        this.dataService.buildAndRun(data)
+            .then(function (res) {
+            _this.output = res.text;
+        })
+            .catch(function (err) {
+            return window.alert(err);
+        });
     };
     ProblemEditorComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -769,7 +791,8 @@ var ProblemEditorComponent = (function () {
             styles: [__webpack_require__("../../../../../src/app/components/problem-editor/problem-editor.component.css")],
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_collaboration_service__["a" /* CollaborationService */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */]])
+            __WEBPACK_IMPORTED_MODULE_2__services_data_service__["a" /* DataService */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* ActivatedRoute */]])
     ], ProblemEditorComponent);
     return ProblemEditorComponent;
 }());
@@ -1286,16 +1309,26 @@ var DataService = (function () {
             .toPromise()
             .then(function (res) {
             _this.getProblems();
+            return Promise.resolve();
+        })
+            .catch(this.handleError);
+    };
+    DataService.prototype.buildAndRun = function (data) {
+        var options = { headers: new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' }) };
+        return this.httpClient.post('api/v1/buildresults', data, options)
+            .toPromise()
+            .then(function (res) {
+            console.log(res);
             return res;
         })
             .catch(this.handleError);
     };
-    // private handleError(error: any): Promise<any> {
-    //   return Promise.reject(error.body || error);
-    // }
     DataService.prototype.handleError = function (error) {
-        console.log(error);
+        return Promise.reject(error.error);
     };
+    // private handleError(error: any): any {
+    //   console.log(error);
+    // }
     // get difficulties
     DataService.prototype.getDifficulties = function () {
         return this.difficulties;

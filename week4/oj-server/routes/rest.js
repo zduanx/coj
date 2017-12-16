@@ -30,4 +30,12 @@ router.post('/problems', jsonParser, (req, res) =>{
 });
 
 // export all modules
+
+router.post('/buildresults', jsonParser, (req, res)=> {
+    const userCodes = req.body.userCodes;
+    const lang = req.body.lang;
+    console.log('lang; ', lang, 'usercode: ', userCodes);
+    res.json({'text': 'hello'});
+})
+
 module.exports = router;

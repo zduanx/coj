@@ -36,8 +36,13 @@ export class NewProblemComponent implements OnInit {
   }
 
   addProblem() {
-    this.dataService.addProblem(this.newProblemForm.value);
-    this.router.navigate(['/problems']);
+    this.dataService.addProblem(this.newProblemForm.value)
+      .then( () =>{
+        this.router.navigate(['/problems']);
+      })
+      .catch(err =>{
+        window.alert(err);
+      })
   }
 
   resetNewProblem(){

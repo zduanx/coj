@@ -33,7 +33,7 @@ export class DataService {
           .catch(this.handleError);
   }
 
-  addProblem(problem: Problem) {
+  addProblem(problem: Problem): Promise<any>{
     // problem.id = this.problems.length + 1;
     // this.problems.push(problem);
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json'})};
@@ -41,17 +41,29 @@ export class DataService {
       .toPromise()
       .then((res: any) => {
         this.getProblems();
+        return Promise.resolve();
+      })
+      .catch(this.handleError);
+  }
+
+
+  buildAndRun(data): Promise<any>{
+    const options = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+    return this.httpClient.post('api/v1/buildresults', data, options)
+      .toPromise()
+      .then(res => {
+        console.log(res);
         return res;
       })
       .catch(this.handleError);
   }
 
-  // private handleError(error: any): Promise<any> {
-  //   return Promise.reject(error.body || error);
-  // }
-  private handleError(error: any): any {
-    console.log(error);
+  private handleError(error: any): Promise<any> {
+    return Promise.reject(error.error);
   }
+  // private handleError(error: any): any {
+  //   console.log(error);
+  // }
 
   // get difficulties
   getDifficulties(): string[]{

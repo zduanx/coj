@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CollaborationService } from '../../services/collaboration.service';
+import { DataService } from '../../services/data.service';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 
 import { ActivatedRoute, Params} from '@angular/router';
@@ -22,8 +23,11 @@ export class ProblemEditorComponent implements OnInit {
   sessionId: string;
   changeGuard: boolean;
 
+  output: string = '';
+
   constructor(
     private collaboration: CollaborationService,
+    private dataService: DataService,
     private route: ActivatedRoute
   ) { }
 
@@ -35,8 +39,6 @@ export class ProblemEditorComponent implements OnInit {
       this.initSocket();
       this.collaboration.restoreBuffer();
     });
-
-
   }
 
   initParam(): void {
@@ -98,11 +100,23 @@ export class ProblemEditorComponent implements OnInit {
     this.changeGuard = true;
     this.editor.setTheme(`ace/theme/${this.theme}`);
     this.editor.setValue(userCode);
+    this.editor.clearSelection();
     this.changeGuard = false;
   }
 
   submit(){
-    const userCode = this.editor.getValue();
-    console.log(userCode);
+    const userCodes = this.editor.getValue();
+    const data = {
+      userCodes: userCodes,
+      lang: this.language.toLocaleLowerCase()
+    };
+
+    this.dataService.buildAndRun(data)
+      .then((res) => {
+        this.output = res.text;
+      })
+      .catch( err =>
+        window.alert(err)
+      );
   }
 }
