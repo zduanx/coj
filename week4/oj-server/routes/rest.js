@@ -40,7 +40,7 @@ router.post('/problems', jsonParser, (req, res) =>{
 router.post('/buildresults', jsonParser, (req, res)=> {
     const userCodes = req.body.userCodes;
     const lang = req.body.lang;
-    console.log('lang; ', lang, 'usercode: ', userCodes);
+    // console.log('lang; ', lang, 'usercode: ', userCodes);
     
     restClient.methods.build_and_run(
         {

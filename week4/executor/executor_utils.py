@@ -7,7 +7,7 @@ from docker.errors import APIError
 from docker.errors import ContainerError
 from docker.errors import ImageNotFound
 
-CURRENT_DIR = os.path.dirname(os.path.relpath(__file__))
+CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
 IMAGE_NAME = 'zduan/coj'
 client = docker.from_env()
 
@@ -48,7 +48,7 @@ def load_image():
 
 def make_dir(dir):
     try:
-        os.mkdir(dir)
+        os.makedirs(dir)
     except OSError:
         print('go die')
 
@@ -59,6 +59,7 @@ def build_and_run(code, lang):
     source_file_guest_dir = "/test/%s" % (source_file_parent_dir_name) #directory in docker
 
     make_dir(source_file_host_dir)
+    print(source_file_host_dir)
 
     with open("%s/%s" %(source_file_host_dir, SOURCE_FILE_NAMES[lang]), 'w') as source_file:
         source_file.write(code)
@@ -69,7 +70,6 @@ def build_and_run(code, lang):
             volumes={source_file_host_dir: {'bind': source_file_guest_dir, 'mode': 'rw'}},
             working_dir=source_file_guest_dir
         )
-        print(os.path.relpath(__file__))
         print('source built')
         result['build'] = 'OK'
     except ContainerError as e:
@@ -88,5 +88,6 @@ def build_and_run(code, lang):
         result['run'] = log
     except ContainerError as e:
         result['run'] = str(e.stderr, 'utf-8')
+    print('source ran')
     shutil.rmtree(source_file_host_dir)
     return result
