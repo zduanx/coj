@@ -59,7 +59,6 @@ def build_and_run(code, lang):
     source_file_guest_dir = "/test/%s" % (source_file_parent_dir_name) #directory in docker
 
     make_dir(source_file_host_dir)
-    print(source_file_host_dir)
 
     with open("%s/%s" %(source_file_host_dir, SOURCE_FILE_NAMES[lang]), 'w') as source_file:
         source_file.write(code)
@@ -88,6 +87,8 @@ def build_and_run(code, lang):
         result['run'] = log
     except ContainerError as e:
         result['run'] = str(e.stderr, 'utf-8')
+
+    print (log)
     print('source ran')
     shutil.rmtree(source_file_host_dir)
     return result

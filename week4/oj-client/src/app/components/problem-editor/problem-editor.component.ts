@@ -47,10 +47,9 @@ export class ProblemEditorComponent implements OnInit {
     this.languages = ['java', 'python'];
     this.themes = ['eclipse', 'tomorrow', 'xcode'];
     this.defaultContent = {
-      'java': `public class Solution{`,
-      'python': `class Solution:`
-    }
-
+      'java': `public class Example {\n\tpublic static void main(String[] args) {\n\t\t// Type your Java code here\n\t}\n}`,
+      'python': `class Solution:\n\tdef example():\n\t\t# Write your Python code here\n\nSolution.example()`
+     };
     this.language = this.languages[0];
     this.theme = this.themes[0];
   }

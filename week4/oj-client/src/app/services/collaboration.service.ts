@@ -43,7 +43,7 @@ export class CollaborationService {
                           background:${COLORS[this.clientNum]};
                           z-index:100;
                           width:3px !important;
-                        }`;
+                        }`;
         document.body.appendChild(css);
         this.clientNum++;
       }
