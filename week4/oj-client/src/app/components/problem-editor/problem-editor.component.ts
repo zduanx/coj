@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CollaborationService } from '../../services/collaboration.service';
 import { DataService } from '../../services/data.service';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
+import { AuthService } from '../../services/auth.service';
 
 import { ActivatedRoute, Params} from '@angular/router';
 
@@ -29,7 +30,8 @@ export class ProblemEditorComponent implements OnInit {
   constructor(
     private collaboration: CollaborationService,
     private dataService: DataService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -105,6 +107,10 @@ export class ProblemEditorComponent implements OnInit {
   }
 
   submit(){
+    if(!this.auth.isAuthenticated()){
+      window.alert("Please sign in to submit code\nExample: root:root@coj.com");
+      return;
+    }
     const userCodes = this.editor.getValue();
     const data = {
       userCodes: userCodes,

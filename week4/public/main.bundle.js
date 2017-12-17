@@ -683,7 +683,8 @@ module.exports = "<section>\n  <header class=\"editor-header\">\n    <select cla
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_collaboration_service__ = __webpack_require__("../../../../../src/app/services/collaboration.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_data_service__ = __webpack_require__("../../../../../src/app/services/data.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -697,11 +698,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ProblemEditorComponent = (function () {
-    function ProblemEditorComponent(collaboration, dataService, route) {
+    function ProblemEditorComponent(collaboration, dataService, route, auth) {
         this.collaboration = collaboration;
         this.dataService = dataService;
         this.route = route;
+        this.auth = auth;
         this.buildoutput = '';
         this.runoutput = '';
     }
@@ -772,6 +775,10 @@ var ProblemEditorComponent = (function () {
     };
     ProblemEditorComponent.prototype.submit = function () {
         var _this = this;
+        if (!this.auth.isAuthenticated()) {
+            window.alert("Please sign in to submit code\nExample: root:root@coj.com");
+            return;
+        }
         var userCodes = this.editor.getValue();
         var data = {
             userCodes: userCodes,
@@ -794,7 +801,8 @@ var ProblemEditorComponent = (function () {
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_collaboration_service__["a" /* CollaborationService */],
             __WEBPACK_IMPORTED_MODULE_2__services_data_service__["a" /* DataService */],
-            __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* ActivatedRoute */]])
+            __WEBPACK_IMPORTED_MODULE_4__angular_router__["a" /* ActivatedRoute */],
+            __WEBPACK_IMPORTED_MODULE_3__services_auth_service__["a" /* AuthService */]])
     ], ProblemEditorComponent);
     return ProblemEditorComponent;
 }());
@@ -1316,7 +1324,9 @@ var DataService = (function () {
             .catch(this.handleError);
     };
     DataService.prototype.buildAndRun = function (data) {
-        var options = { headers: new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' }) };
+        var id_token = localStorage.getItem('id_token');
+        ;
+        var options = { headers: new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json', 'Authorization': "Bearer " + id_token }) };
         return this.httpClient.post('api/v1/buildresults', data, options)
             .toPromise()
             .then(function (res) {

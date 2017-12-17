@@ -48,7 +48,8 @@ export class DataService {
 
 
   buildAndRun(data): Promise<any>{
-    const options = {headers: new HttpHeaders({'Content-Type': 'application/json'})};
+    const id_token = localStorage.getItem('id_token');;
+    const options = {headers: new HttpHeaders({'Content-Type': 'application/json', 'Authorization': `Bearer ${id_token}`})};
     return this.httpClient.post('api/v1/buildresults', data, options)
       .toPromise()
       .then(res => {

@@ -6,6 +6,15 @@ const jsonParser = bodyParser.json();
 const nodeRestClient = require('node-rest-client').Client;
 const restClient = new nodeRestClient();
 
+const clientErrorCheck = require('../middleware/clientErrorCheck');
+const expressJwt = require('express-jwt');
+const jwtCheck = expressJwt({
+    secret: require('auth0-api-jwt-rsa-validation')(),
+    // issuer: `apocalypse.auth0.com/`,
+    issuer: `https://apocalypse.auth0.com/`,
+    algorithms: ['RS256']
+});
+
 EXECUTOR_SERVER_URL = 'http://localhost:5000/buildresults';
 
 restClient.registerMethod('build_and_run', EXECUTOR_SERVER_URL, 'POST');
@@ -36,8 +45,14 @@ router.post('/problems', jsonParser, (req, res) =>{
 });
 
 // export all modules
-
-router.post('/buildresults', jsonParser, (req, res)=> {
+// add jwtCheck middleware, validate header Authorization: 'Bearer ${id_token}', append req.body.user = auth.user
+// if jwtCheck fails, use clientErrorCheck error -handling middleware append req.body.user = {}
+// this is used to identify who send the request & block unauthorized access
+router.post('/buildresults', [jsonParser, jwtCheck, clientErrorCheck], (req, res)=> {
+    if(!req.user.name){
+        res.status(403).send('Not Authorized access');
+        return;
+    }
     const userCodes = req.body.userCodes;
     const lang = req.body.lang;
     // console.log('lang; ', lang, 'usercode: ', userCodes);
