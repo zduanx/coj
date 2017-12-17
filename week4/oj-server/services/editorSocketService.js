@@ -10,7 +10,7 @@ module.exports = function(io) {
     // }
 
     // map from socketId to sessionid
-    const sessionPath = '/temp_sessions';
+    const sessionPath = '/coj_sessions';
     const socketIdToSessionId = {};
 
     io.on('connection', (socket)=>{
@@ -18,13 +18,16 @@ module.exports = function(io) {
         socketIdToSessionId[socket.id] = sessionId;
 
         if(sessionId in collaborations){
-           collaborations[sessionId]['participants'].push(socket.id);
+            collaborations[sessionId]['participants'].push(socket.id);
+            io.to(socket.id).emit('langChange', collaborations[sessionId]['language']);
         } else{
             redisClient.get(sessionPath + '/' + sessionId, data =>{
                 if(data){
                     console.log('>> editorSocketService: session terminated previously, pulling back from redis for id:' + sessionId);
+                    data = JSON.parse(data);
                     collaborations[sessionId] = {
-                        'cachedInstructions': JSON.parse(data),
+                        'cachedInstructions': data['inst'],
+                        'language': data['lang'],
                         'participants': []
                     }
                     // console.log(collaborations);
@@ -32,12 +35,24 @@ module.exports = function(io) {
                     console.log('>> editorSocketService: create new session for id:' + sessionId);
                     collaborations[sessionId] = {
                         'cachedInstructions': [],
+                        'language': "",
                         'participants': []
                     }
                 } 
                 collaborations[sessionId]['participants'].push(socket.id);
+                io.to(socket.id).emit('langChange', collaborations[sessionId]['language']);
             })
         }
+
+        // when langChange emit empty string, client will reply langSet
+        socket.on('langSet', lang => {
+            const sessionId = socketIdToSessionId[socket.id];
+            console.log('>> editorSocketService: language change for id:' + sessionId);
+            if(sessionId in collaborations){
+                collaborations[sessionId]['language'] = lang;
+            }
+            forwardEvent(socket.id, 'langChange', lang);
+        });
 
         socket.on('change', delta =>{
             const sessionId = socketIdToSessionId[socket.id];
@@ -55,6 +70,7 @@ module.exports = function(io) {
             if(sessionId in collaborations){
                 collaborations[sessionId]['cachedInstructions'] = [];
             }
+            forwardEvent(socket.id, 'langChange', collaborations[sessionId]['language']);
         });
         
         // from payson
@@ -88,7 +104,7 @@ module.exports = function(io) {
                     foundAndRemove = true; 
                     if(participants.length == 0){
                         const key = sessionPath + '/' + sessionId;
-                        const value = JSON.stringify(collaborations[sessionId]['cachedInstructions']);
+                        const value = JSON.stringify({'inst': collaborations[sessionId]['cachedInstructions'], 'lang': collaborations[sessionId]['language']});
                         redisClient.set(key, value, redisClient.redisPrint);
                         redisClient.expire(key, TIMEOUT_IN_SECONDS);
                         delete collaborations[sessionId];

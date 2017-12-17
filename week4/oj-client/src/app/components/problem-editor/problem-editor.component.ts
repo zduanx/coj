@@ -51,20 +51,20 @@ export class ProblemEditorComponent implements OnInit {
     this.defaultContent = {
       'java': `public class Example {\n\tpublic static void main(String[] args) {\n\t\t// Type your Java code here\n\t}\n}`,
       'python': `class Solution:\n\tdef example():\n\t\t# Write your Python code here\n\nSolution.example()`
-     };
-    this.language = this.languages[0];
+    };
+    this.language = '';
     this.theme = this.themes[0];
   }
 
   initEditor(): void {
     this.editor = ace.edit("editor");
     this.editor.$blockScrolling = Infinity;
-    this.initResetEditor();
+    this.initResetEditor(this.languages[0]);
   }
 
   initSocket(){
     // setup collabration socket
-    this.collaboration.init(this.editor, this.sessionId);
+    this.collaboration.init(this.editor, this.sessionId, this);
     this.editor.lastAppliedChange = null;
 
     // register change callback
@@ -81,25 +81,32 @@ export class ProblemEditorComponent implements OnInit {
     });
   }
 
-  initResetEditor(){
-    this.editor.setTheme(`ace/theme/${this.theme}`);
-    this.editor.getSession().setMode(`ace/mode/${this.language}`);
-    this.editor.setValue(this.defaultContent[`${this.language}`]);
-    this.editor.clearSelection();
+  initResetEditor(language: string){
+    this.setTheme();
+    this.setLanguageSoft(language);
   }
 
   resetPage(){
-    this.initResetEditor();
+    this.setLanguageSoft(this.language);
     this.collaboration.reset();
   }
 
   setLanguage() {
+    this.collaboration.languageSet(this.language);
     this.resetPage();
+  }
+
+  public setLanguageSoft(language: string){
+    this.language = language;
+    this.changeGuard = true;
+    this.editor.getSession().setMode(`ace/mode/${this.language}`);
+    this.editor.setValue(this.defaultContent[`${this.language}`]);
+    this.editor.clearSelection();
+    this.changeGuard = false;
   }
 
   setTheme() {
     const userCode = this.editor.getValue();
-    this.changeGuard = true;
     this.editor.setTheme(`ace/theme/${this.theme}`);
     this.editor.setValue(userCode);
     this.editor.clearSelection();

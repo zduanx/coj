@@ -6,13 +6,15 @@ declare const ace: any;
 @Injectable()
 export class CollaborationService {
   collaborationSocket: any;
+  problemEditor: any;
   
   clientsInfo: Object = {};
   clientNum: number = 0;
 
   constructor() { }
 
-  init(editor: any, sessionId: string): void{
+  init(editor: any, sessionId: string, problemEditor: any): void{
+    this.problemEditor = problemEditor;
     this.collaborationSocket = io(window.location.origin, {query: 'sessionId=' + sessionId});
 
     this.collaborationSocket.on('change', (delta: string) => {
@@ -60,6 +62,20 @@ export class CollaborationService {
         session.removeMarker(this.clientsInfo[changeClientId]['marker']);
       }
     });
+
+    this.collaborationSocket.on('langChange', (language: string) => {
+      console.log(`>> collaboration.service: socket request to change language ->${language}<-`);
+      if(!language){
+        this.languageSet(this.problemEditor.language)
+      }
+      else{
+        this.problemEditor.setLanguageSoft(language);
+      }
+    });
+  }
+
+  languageSet(language: string): void {
+    this.collaborationSocket.emit('langSet', language);
   }
 
   change(delta: string): void {

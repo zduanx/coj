@@ -726,18 +726,18 @@ var ProblemEditorComponent = (function () {
             'java': "public class Example {\n\tpublic static void main(String[] args) {\n\t\t// Type your Java code here\n\t}\n}",
             'python': "class Solution:\n\tdef example():\n\t\t# Write your Python code here\n\nSolution.example()"
         };
-        this.language = this.languages[0];
+        this.language = '';
         this.theme = this.themes[0];
     };
     ProblemEditorComponent.prototype.initEditor = function () {
         this.editor = ace.edit("editor");
         this.editor.$blockScrolling = Infinity;
-        this.initResetEditor();
+        this.initResetEditor(this.languages[0]);
     };
     ProblemEditorComponent.prototype.initSocket = function () {
         var _this = this;
         // setup collabration socket
-        this.collaboration.init(this.editor, this.sessionId);
+        this.collaboration.init(this.editor, this.sessionId, this);
         this.editor.lastAppliedChange = null;
         // register change callback
         this.editor.on('change', function (e) {
@@ -752,22 +752,28 @@ var ProblemEditorComponent = (function () {
             _this.collaboration.cursorMove(JSON.stringify(cursor));
         });
     };
-    ProblemEditorComponent.prototype.initResetEditor = function () {
-        this.editor.setTheme("ace/theme/" + this.theme);
-        this.editor.getSession().setMode("ace/mode/" + this.language);
-        this.editor.setValue(this.defaultContent["" + this.language]);
-        this.editor.clearSelection();
+    ProblemEditorComponent.prototype.initResetEditor = function (language) {
+        this.setTheme();
+        this.setLanguageSoft(language);
     };
     ProblemEditorComponent.prototype.resetPage = function () {
-        this.initResetEditor();
+        this.setLanguageSoft(this.language);
         this.collaboration.reset();
     };
     ProblemEditorComponent.prototype.setLanguage = function () {
+        this.collaboration.languageSet(this.language);
         this.resetPage();
+    };
+    ProblemEditorComponent.prototype.setLanguageSoft = function (language) {
+        this.language = language;
+        this.changeGuard = true;
+        this.editor.getSession().setMode("ace/mode/" + this.language);
+        this.editor.setValue(this.defaultContent["" + this.language]);
+        this.editor.clearSelection();
+        this.changeGuard = false;
     };
     ProblemEditorComponent.prototype.setTheme = function () {
         var userCode = this.editor.getValue();
-        this.changeGuard = true;
         this.editor.setTheme("ace/theme/" + this.theme);
         this.editor.setValue(userCode);
         this.editor.clearSelection();
@@ -1197,8 +1203,9 @@ var CollaborationService = (function () {
         this.clientsInfo = {};
         this.clientNum = 0;
     }
-    CollaborationService.prototype.init = function (editor, sessionId) {
+    CollaborationService.prototype.init = function (editor, sessionId, problemEditor) {
         var _this = this;
+        this.problemEditor = problemEditor;
         this.collaborationSocket = io(window.location.origin, { query: 'sessionId=' + sessionId });
         this.collaborationSocket.on('change', function (delta) {
             delta = JSON.parse(delta);
@@ -1236,6 +1243,18 @@ var CollaborationService = (function () {
                 session.removeMarker(_this.clientsInfo[changeClientId]['marker']);
             }
         });
+        this.collaborationSocket.on('langChange', function (language) {
+            console.log(">> collaboration.service: socket request to change language ->" + language + "<-");
+            if (!language) {
+                _this.languageSet(_this.problemEditor.language);
+            }
+            else {
+                _this.problemEditor.setLanguageSoft(language);
+            }
+        });
+    };
+    CollaborationService.prototype.languageSet = function (language) {
+        this.collaborationSocket.emit('langSet', language);
     };
     CollaborationService.prototype.change = function (delta) {
         this.collaborationSocket.emit('change', delta);
