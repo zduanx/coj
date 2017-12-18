@@ -1,10 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CollaborationService } from '../../services/collaboration.service';
 import { DataService } from '../../services/data.service';
 import { CapitalizePipe } from '../../pipes/capitalize.pipe';
 import { AuthService } from '../../services/auth.service';
 
 import { ActivatedRoute, Params} from '@angular/router';
+import { COLORS } from '../../../assets/colors';
+
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+import 'rxjs/add/operator/share';
+import { Subscription } from 'rxjs/Subscription';
 
 declare const ace: any;
 @Component({
@@ -28,14 +34,27 @@ export class ProblemEditorComponent implements OnInit {
   runoutput: string = '';
 
   participants: any = {};
-  user: string = 'anonymous';
+  user: string;
+
+  availableColors = COLORS;
+  color: string = COLORS[0];
+
+  // this is used to monitor localStorageChange
+  private onSubject = new Subject<{key: string, value: any}>();
+  public changes = this.onSubject.asObservable().share();
 
   constructor(
     private collaboration: CollaborationService,
     private dataService: DataService,
     private route: ActivatedRoute,
     public auth: AuthService
-  ) { }
+  ) {
+    this.monitorStart();
+  }
+
+  ngOnDestroy(){
+    this.monitorStop();
+  }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -43,16 +62,55 @@ export class ProblemEditorComponent implements OnInit {
       this.initParam();
       this.initEditor();
       this.initSocket();
-      this.initUser();
+      this.registerUser();
+      this.collaboration.restoreUsers();
       this.collaboration.restoreBuffer();
+      this.handleLocalStorageChange();
     });
   }
 
-  initUser(): void {
-    if (this.auth.userProfile) {
-      this.user = this.auth.userProfile.email;
+  monitorStart(){
+    window.addEventListener("storage", this.storageEventListener.bind(this));
+  }
+
+  monitorStop(){
+    window.removeEventListener("storage", this.storageEventListener.bind(this));
+    this.onSubject.complete();
+  }
+
+  private storageEventListener(event: StorageEvent){
+    if(event.storageArea == localStorage){
+      let v;
+      try {v = JSON.parse(event.newValue);}
+      catch(e) {v = event.newValue;}
+      this.onSubject.next({key: event.key, value: v});
     }
-    this.collaboration.register(this.user);
+  }
+
+  handleLocalStorageChange(){
+    this.changes.subscribe(
+      value => {
+        if(value.key === 'user_profile_coj'){
+          this.getUserName();
+          this.collaboration.updateUserName(this.user);
+        }
+      }
+    )
+  }
+
+  getUserName(): void{
+    const profile = localStorage.getItem('user_profile_coj');
+    if(this.auth.isAuthenticated() && profile){
+      this.user = JSON.parse(profile).name;
+    }
+    else{
+      this.user = 'anonymous';
+    }
+  }
+
+  registerUser(): void {
+    this.getUserName();
+    this.collaboration.register(this.user, this.color);
   }
 
   initParam(): void {
@@ -122,6 +180,10 @@ export class ProblemEditorComponent implements OnInit {
     this.editor.setValue(userCode);
     this.editor.clearSelection();
     this.changeGuard = false;
+  }
+
+  changeColor(){
+    this.collaboration.updateColor(this.color);
   }
 
   submit(){

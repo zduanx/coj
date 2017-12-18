@@ -6,7 +6,7 @@ module.exports = function(io) {
     // collaboration sessions
     const collaborations = {};
     // {
-    //     participants: {$id:[$name, $color]}
+    //     participants: {$id:{$name, $color}}
     // }
 
     // map from socketId to sessionid
@@ -19,7 +19,7 @@ module.exports = function(io) {
         socketIdToSessionId[socket.id] = sessionId;
 
         if(sessionId in collaborations){
-            collaborations[sessionId]['participants'][sid] = ['',''];
+            collaborations[sessionId]['participants'][sid] = {'name': '', 'color':''};
             io.to(socket.id).emit('langChange', collaborations[sessionId]['language']);
         } else{
             redisClient.get(sessionPath + '/' + sessionId, data =>{
@@ -40,7 +40,7 @@ module.exports = function(io) {
                         'participants': {}
                     }
                 } 
-                collaborations[sessionId]['participants'][sid] = ['',''];
+                collaborations[sessionId]['participants'][sid] = {'name': '', 'color':''};
                 io.to(socket.id).emit('langChange', collaborations[sessionId]['language']);
             })
         }
@@ -57,6 +57,7 @@ module.exports = function(io) {
 
         socket.on('change', delta =>{
             const sessionId = socketIdToSessionId[socket.id];
+            console.log(this.collaborations);
             if(sessionId in collaborations){
                 collaborations[sessionId]['cachedInstructions'].push(['change', delta, Date.now()]);
             }
@@ -92,16 +93,45 @@ module.exports = function(io) {
             }
         });
 
-        socket.on('register', (user)=>{
+        socket.on('register', (userInfo)=>{
+            const sessionId = socketIdToSessionId[socket.id];
+            if(sessionId in collaborations && socket.id in collaborations[sessionId]['participants']){
+                let newUser = JSON.parse(userInfo);
+                collaborations[sessionId]['participants'][socket.id] = newUser;
+                forwardEvent(socket.id, 'addUser', JSON.stringify({'id': socket.id, 'name': newUser['name'], 'color': newUser['color']}));
+            }
+        });
+
+        socket.on('updateColor', (color)=>{
+            const sessionId = socketIdToSessionId[socket.id];
+            if(sessionId in collaborations && socket.id in collaborations[sessionId]['participants']){
+                collaborations[sessionId]['participants'][socket.id]['color'] = color;
+                forwardEvent(socket.id, 'updateColor', JSON.stringify({'id': socket.id, 'color': color}));
+            }
+        });
+
+        socket.on('updateUserName', (username)=>{
+            const sessionId = socketIdToSessionId[socket.id];
+            if(sessionId in collaborations && socket.id in collaborations[sessionId]['participants']){
+                collaborations[sessionId]['participants'][socket.id]['name'] = username;
+                forwardEventAll(socket.id, 'updateUserName', JSON.stringify({'id': socket.id, 'name': username}));
+            }
+        });
+
+        socket.on('restoreUser', ()=>{
             const sessionId = socketIdToSessionId[socket.id];
             if(sessionId in collaborations){
-
+                io.to(socket.id).emit('loadUsers', JSON.stringify(collaborations[sessionId]['participants']));
             }
-            forwardEvent(socket.id, 'addUser', JSON.stringify({'id': socket.id, 'name': user, 'color': ''}));
+        });
+
+        socket.on('querySID', ()=>{
+            io.to(socket.id).emit('querySID', socket.id);
         });
 
         socket.on('disconnect', () =>{
             forwardEvent(socket.id, 'cursorDelete', socket.id);
+            forwardEvent(socket.id, 'deleteUser', socket.id);
             const sessionId = socketIdToSessionId[socket.id];
             let foundAndRemove = false;
             if(sessionId in collaborations){
@@ -131,10 +161,23 @@ module.exports = function(io) {
         const sessionId = socketIdToSessionId[socketId];
         if (sessionId in collaborations) {
             const participants = collaborations[sessionId]['participants'];
+
             for(let participant of Object.keys(participants)) {
                 if (socketId != participant) {
                     io.to(participant).emit(eventName, dataString);
                 }
+            }
+        } else {
+            console.warn('<< editorSocketService --- WARNING: sessionId should exist');
+        }
+    }
+    const forwardEventAll = function(socketId, eventName, dataString) {
+        const sessionId = socketIdToSessionId[socketId];
+        if (sessionId in collaborations) {
+            const participants = collaborations[sessionId]['participants'];
+
+            for(let participant of Object.keys(participants)) {
+                io.to(participant).emit(eventName, dataString);
             }
         } else {
             console.warn('<< editorSocketService --- WARNING: sessionId should exist');

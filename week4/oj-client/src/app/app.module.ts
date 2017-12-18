@@ -23,7 +23,7 @@ import { CapitalizePipe } from './pipes/capitalize.pipe';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './auth.guard';
 import { ProblemCommunicatorComponent } from './components/problem-communicator/problem-communicator.component';
-
+import { ColorPickerModule } from 'ngx-color-picker';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,6 +39,7 @@ import { ProblemCommunicatorComponent } from './components/problem-communicator/
     ProblemCommunicatorComponent
   ],
   imports: [
+    ColorPickerModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,

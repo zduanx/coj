@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { COLORS } from '../../assets/colors';
 
 declare const io: any;
 declare const ace: any;
@@ -7,15 +6,20 @@ declare const ace: any;
 export class CollaborationService {
   collaborationSocket: any;
   problemEditor: any;
+  mySocketId: string;
   
   clientsInfo: Object = {};
-  clientNum: number = 0;
 
   constructor() { }
 
   init(editor: any, sessionId: string, problemEditor: any): void{
     this.problemEditor = problemEditor;
     this.collaborationSocket = io(window.location.origin, {query: 'sessionId=' + sessionId});
+    this.collaborationSocket.emit('querySID');
+
+    this.collaborationSocket.on('querySID', (id: string) => {
+      this.mySocketId = id;
+    })
 
     this.collaborationSocket.on('change', (delta: string) => {
       delta = JSON.parse(delta);
@@ -33,25 +37,22 @@ export class CollaborationService {
       const changeClientId = cursor['socketId'];
       // console.log(x + ' ' + y +  '\n' + changeClientId);
 
-      if (changeClientId in this.clientsInfo) {
-        session.removeMarker(this.clientsInfo[changeClientId]['marker']);
-      } else {
-        this.clientsInfo[changeClientId] = {};
-        const css = document.createElement('style');
-        css.type = 'text/css';
-        css.innerHTML = `.editor_cursor_${changeClientId}
-                        { 
-                          position:absolute;
-                          background:${COLORS[this.clientNum]};
-                          z-index:100;
-                          width:3px !important;
-                        }`;
-        document.body.appendChild(css);
-        this.clientNum++;
+      if (changeClientId in this.clientsInfo){
+        if('marker' in this.clientsInfo[changeClientId]){         
+          session.removeMarker(this.clientsInfo[changeClientId]['marker']);
+        } else {
+          this.clientsInfo[changeClientId]['marker'] = undefined;
+          const css = document.createElement('style');
+          css.type = 'text/css';
+          this.updateCSSColor(css, changeClientId, this.clientsInfo[changeClientId]['color']);
+          document.body.appendChild(css);
+          this.clientsInfo[changeClientId]['css'] = css;
+        }
+
+        const Range = ace.require('ace/range').Range;
+        const newMarker = session.addMarker(new Range(x, y, x, y + 1), `editor_cursor_${changeClientId}`, true);
+        this.clientsInfo[changeClientId]['marker'] = newMarker;
       }
-      const Range = ace.require('ace/range').Range;
-      const newMarker = session.addMarker(new Range(x, y, x, y + 1), `editor_cursor_${changeClientId}`, true);
-      this.clientsInfo[changeClientId]['marker'] = newMarker;
     });
     
     this.collaborationSocket.on('cursorDelete', (changeClientId: string) => {
@@ -60,6 +61,9 @@ export class CollaborationService {
 
       if (changeClientId in this.clientsInfo) {
         session.removeMarker(this.clientsInfo[changeClientId]['marker']);
+        if('css' in this.clientsInfo[changeClientId]){
+          document.body.removeChild(this.clientsInfo[changeClientId]['css']);
+        }
       }
     });
 
@@ -72,6 +76,61 @@ export class CollaborationService {
         this.problemEditor.setLanguageSoft(language);
       }
     });
+
+    this.collaborationSocket.on('loadUsers', (users: string) => {
+      this.clientsInfo = JSON.parse(users);
+      this.problemEditor.participants = this.clientsInfo;
+    });
+
+    this.collaborationSocket.on('updateColor', (updates: string) => {
+      const updateInfo = JSON.parse(updates);
+      const uid = updateInfo['id'];
+      const color = updateInfo['color'];
+      if(uid in this.clientsInfo){
+        if(color != this.clientsInfo[uid]['color']){
+          if('css' in this.clientsInfo[uid]){
+            this.updateCSSColor(this.clientsInfo[uid]['css'], uid, color);
+          }
+          this.clientsInfo[uid]['color'] = color;
+          this.problemEditor.participants = this.clientsInfo;
+        }
+      }
+    });
+
+    this.collaborationSocket.on('updateUserName', (updates: string) => {
+      const updateInfo = JSON.parse(updates);
+      const uid = updateInfo['id'];
+      const name = updateInfo['name'];
+      if(uid in this.clientsInfo){
+        this.clientsInfo[uid]['name'] = name;
+        this.problemEditor.participants = this.clientsInfo;
+      }
+    });
+
+    this.collaborationSocket.on('addUser', (user: string) => {
+      const userInfo = JSON.parse(user);
+      const id = userInfo['id']
+      const name = userInfo['name']
+      const color = userInfo['color']
+      delete this.clientsInfo[id];
+      this.clientsInfo[id] = {'name': name, 'color': color};
+      this.problemEditor.participants = this.clientsInfo;
+    });
+
+    this.collaborationSocket.on('deleteUser', (uid: string) => {
+      delete this.clientsInfo[uid];
+      this.problemEditor.participants = this.clientsInfo;
+    });
+  }
+
+  updateCSSColor(css: any, uid: string, color: string): void{
+    css.innerHTML = `.editor_cursor_${uid}
+                    { 
+                      position:absolute;
+                      background:${color};
+                      z-index:100;
+                      width:3px !important;
+                    }`;
   }
 
   languageSet(language: string): void {
@@ -81,9 +140,13 @@ export class CollaborationService {
   change(delta: string): void {
     this.collaborationSocket.emit('change', delta);
   }
-
+  
   restoreBuffer(): void {
     this.collaborationSocket.emit('restoreBuffer');
+  }
+
+  restoreUsers(): void{
+    this.collaborationSocket.emit('restoreUser');
   }
 
   reset(): void {
@@ -94,7 +157,15 @@ export class CollaborationService {
     this.collaborationSocket.emit('cursorMove', cursor);
   }
 
-  register(user: string){
-    this.collaborationSocket.emit('register', user);
+  register(user: string, color: string){
+    this.collaborationSocket.emit('register', JSON.stringify({'name': user, 'color': color}));
+  }
+
+  updateColor(color: string){
+    this.collaborationSocket.emit('updateColor', color);
+  }
+
+  updateUserName(user: string){
+    this.collaborationSocket.emit('updateUserName', user);
   }
 }

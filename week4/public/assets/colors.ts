@@ -1,4 +1,5 @@
 export const COLORS: [string] = [ 
+    "#ffa500", 
     "#0000ff", 
     "#a52a2a", 
     "#00ffff", 
@@ -30,7 +31,6 @@ export const COLORS: [string] = [
     "#800000", 
     "#000080", 
     "#808000", 
-    "#ffa500", 
     "#ffc0cb", 
     "#800080", 
     "#800080", 

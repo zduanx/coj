@@ -28,4 +28,13 @@
         margin-left: 0px !important;
         margin-right: 0px !important;
     }
+
+    .btn-color{
+        width: 2.5em;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-indent: -9999px;
+        border-radius: 1.25em;
+    }
 }

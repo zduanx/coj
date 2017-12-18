@@ -194,12 +194,14 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__auth_guard__ = __webpack_require__("../../../../../src/app/auth.guard.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_problem_communicator_problem_communicator_component__ = __webpack_require__("../../../../../src/app/components/problem-communicator/problem-communicator.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21_ngx_color_picker__ = __webpack_require__("../../../../ngx-color-picker/dist/ngx-color-picker.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -240,6 +242,7 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_20__components_problem_communicator_problem_communicator_component__["a" /* ProblemCommunicatorComponent */]
             ],
             imports: [
+                __WEBPACK_IMPORTED_MODULE_21_ngx_color_picker__["a" /* ColorPickerModule */],
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_15__app_routing_module__["a" /* AppRoutingModule */],
                 __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* FormsModule */],
@@ -580,7 +583,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-communicator/problem-communicator.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-sm-12\">\n    <h3>Participants</h3>\n    {{participants | json}}\n  </div>\n\n  <div class=\"col-sm-12\">\n    \n    {{participants | json}}\n  </div>\n</div>"
+module.exports = "<div class=\"row\">\n  <div class=\"col-sm-12\">\n    <h3>Participants</h3>\n    {{participants | json}}\n  </div>\n\n  <div class=\"col-sm-12\">\n    \n    haha\n  </div>\n</div>"
 
 /***/ }),
 
@@ -726,7 +729,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "@media screen {\n    #editor{\n        height: 600px;\n    }\n    .option-select{\n        max-width: 100px;\n        margin-right: 10px;\n    }\n\n    header .btn {\n        margin: 0 5px;\n    }\n\n    footer .btn {\n        margin: 0 5px;\n    }\n\n    .editor-footer, .editor-header{\n        margin: 10px 0;\n    }\n\n    .cursor{\n        background:rgba(0, 250, 0, 0.5);\n        z-index: 40;\n        width: 2px !important\n    }\n    .editor-css{\n        margin-left: 0px !important;\n        margin-right: 0px !important;\n    }\n}\n", ""]);
+exports.push([module.i, "@media screen {\n    #editor{\n        height: 600px;\n    }\n    .option-select{\n        max-width: 100px;\n        margin-right: 10px;\n    }\n\n    header .btn {\n        margin: 0 5px;\n    }\n\n    footer .btn {\n        margin: 0 5px;\n    }\n\n    .editor-footer, .editor-header{\n        margin: 10px 0;\n    }\n\n    .cursor{\n        background:rgba(0, 250, 0, 0.5);\n        z-index: 40;\n        width: 2px !important\n    }\n    .editor-css{\n        margin-left: 0px !important;\n        margin-right: 0px !important;\n    }\n\n    .btn-color{\n        width: 2.5em;\n        text-align: left;\n        white-space: nowrap;\n        overflow: hidden;\n        text-indent: -9999px;\n        border-radius: 1.25em;\n    }\n}\n", ""]);
 
 // exports
 
@@ -739,7 +742,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-editor/problem-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section>\n<div class=\"row\">\n\n<div class=\"col-md-6 col-sm-12\">\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n    <h4>Build Results:</h4>\n    <div>\n      <p>{{buildoutput}}</p>\n      <p>{{runoutput}}</p>\n    </div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</div>\n\n<div class=\"col-sm-12 col-md-6\">\n  <app-problem-communicator [participants]=\"participants\"></app-problem-communicator>\n</div>\n</div>\n</section>"
+module.exports = "<section>\n<div class=\"row\">\n\n<div class=\"col-md-6 col-sm-12\">\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n    <button class=\"btn btn-default btn-color\" [(colorPicker)]=\"color\"\n    [cpPosition]=\"'bottom'\"\n    [style.backgroundColor]=\"color\"\n    [cpPositionOffset]=\"'50%'\"\n    [cpPresetColors]=\"availableColors\"\n    [cpPositionRelativeToArrow]=\"true\"\n    [cpOKButton]=\"true\"\n    [cpSaveClickOutside]=\"false\"\n    [cpOKButtonClass]= \"'btn btn-primary btn-xs'\"\n    (colorPickerSelect)=\"changeColor()\">color</button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n    <h4>Build Results:</h4>\n    <div>\n      <p>{{buildoutput}}</p>\n      <p>{{runoutput}}</p>\n    </div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</div>\n\n<div class=\"col-sm-12 col-md-6\">\n  <app-problem-communicator [participants]=\"participants\"></app-problem-communicator>\n</div>\n</div>\n</section>"
 
 /***/ }),
 
@@ -753,6 +756,9 @@ module.exports = "<section>\n<div class=\"row\">\n\n<div class=\"col-md-6 col-sm
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_data_service__ = __webpack_require__("../../../../../src/app/services/data.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__assets_colors__ = __webpack_require__("../../../../../src/assets/colors.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_add_operator_share__ = __webpack_require__("../../../../rxjs/_esm5/add/operator/share.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -767,6 +773,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
+
 var ProblemEditorComponent = (function () {
     function ProblemEditorComponent(collaboration, dataService, route, auth) {
         this.collaboration = collaboration;
@@ -776,8 +785,16 @@ var ProblemEditorComponent = (function () {
         this.buildoutput = '';
         this.runoutput = '';
         this.participants = {};
-        this.user = 'anonymous';
+        this.availableColors = __WEBPACK_IMPORTED_MODULE_5__assets_colors__["a" /* COLORS */];
+        this.color = __WEBPACK_IMPORTED_MODULE_5__assets_colors__["a" /* COLORS */][0];
+        // this is used to monitor localStorageChange
+        this.onSubject = new __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__["a" /* Subject */]();
+        this.changes = this.onSubject.asObservable().share();
+        this.monitorStart();
     }
+    ProblemEditorComponent.prototype.ngOnDestroy = function () {
+        this.monitorStop();
+    };
     ProblemEditorComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.route.params.subscribe(function (params) {
@@ -785,15 +802,52 @@ var ProblemEditorComponent = (function () {
             _this.initParam();
             _this.initEditor();
             _this.initSocket();
-            _this.initUser();
+            _this.registerUser();
+            _this.collaboration.restoreUsers();
             _this.collaboration.restoreBuffer();
+            _this.handleLocalStorageChange();
         });
     };
-    ProblemEditorComponent.prototype.initUser = function () {
-        if (this.auth.userProfile) {
-            this.user = this.auth.userProfile.email;
+    ProblemEditorComponent.prototype.monitorStart = function () {
+        window.addEventListener("storage", this.storageEventListener.bind(this));
+    };
+    ProblemEditorComponent.prototype.monitorStop = function () {
+        window.removeEventListener("storage", this.storageEventListener.bind(this));
+        this.onSubject.complete();
+    };
+    ProblemEditorComponent.prototype.storageEventListener = function (event) {
+        if (event.storageArea == localStorage) {
+            var v = void 0;
+            try {
+                v = JSON.parse(event.newValue);
+            }
+            catch (e) {
+                v = event.newValue;
+            }
+            this.onSubject.next({ key: event.key, value: v });
         }
-        this.collaboration.register(this.user);
+    };
+    ProblemEditorComponent.prototype.handleLocalStorageChange = function () {
+        var _this = this;
+        this.changes.subscribe(function (value) {
+            if (value.key === 'user_profile_coj') {
+                _this.getUserName();
+                _this.collaboration.updateUserName(_this.user);
+            }
+        });
+    };
+    ProblemEditorComponent.prototype.getUserName = function () {
+        var profile = localStorage.getItem('user_profile_coj');
+        if (this.auth.isAuthenticated() && profile) {
+            this.user = JSON.parse(profile).name;
+        }
+        else {
+            this.user = 'anonymous';
+        }
+    };
+    ProblemEditorComponent.prototype.registerUser = function () {
+        this.getUserName();
+        this.collaboration.register(this.user, this.color);
     };
     ProblemEditorComponent.prototype.initParam = function () {
         this.changeGuard = false;
@@ -855,6 +909,9 @@ var ProblemEditorComponent = (function () {
         this.editor.setValue(userCode);
         this.editor.clearSelection();
         this.changeGuard = false;
+    };
+    ProblemEditorComponent.prototype.changeColor = function () {
+        this.collaboration.updateColor(this.color);
     };
     ProblemEditorComponent.prototype.submit = function () {
         var _this = this;
@@ -1212,17 +1269,23 @@ var AuthService = (function () {
         });
     };
     AuthService.prototype.setSession = function (authResult) {
+        var _this = this;
         // Set the time that the access token will expire at
         var expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
         localStorage.setItem('access_token', authResult.accessToken);
         localStorage.setItem('id_token', authResult.idToken);
         localStorage.setItem('expires_at', expiresAt);
+        this.getProfile(function (err, profile) {
+            _this.userProfile = profile;
+            localStorage.setItem('user_profile_coj', JSON.stringify(_this.userProfile));
+        });
     };
     AuthService.prototype.logout = function () {
         // Remove tokens and expiry time from localStorage
         localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
         localStorage.removeItem('expires_at');
+        localStorage.removeItem('user_profile_coj');
         // Go back to the home route
         this.router.navigate(['/']);
     };
@@ -1263,7 +1326,6 @@ var AUTH_CONFIG = {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CollaborationService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__assets_colors__ = __webpack_require__("../../../../../src/assets/colors.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1274,16 +1336,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-
 var CollaborationService = (function () {
     function CollaborationService() {
         this.clientsInfo = {};
-        this.clientNum = 0;
     }
     CollaborationService.prototype.init = function (editor, sessionId, problemEditor) {
         var _this = this;
         this.problemEditor = problemEditor;
         this.collaborationSocket = io(window.location.origin, { query: 'sessionId=' + sessionId });
+        this.collaborationSocket.emit('querySID');
+        this.collaborationSocket.on('querySID', function (id) {
+            _this.mySocketId = id;
+        });
         this.collaborationSocket.on('change', function (delta) {
             delta = JSON.parse(delta);
             editor.lastAppliedChange = delta;
@@ -1299,25 +1363,30 @@ var CollaborationService = (function () {
             var changeClientId = cursor['socketId'];
             // console.log(x + ' ' + y +  '\n' + changeClientId);
             if (changeClientId in _this.clientsInfo) {
-                session.removeMarker(_this.clientsInfo[changeClientId]['marker']);
+                if ('marker' in _this.clientsInfo[changeClientId]) {
+                    session.removeMarker(_this.clientsInfo[changeClientId]['marker']);
+                }
+                else {
+                    _this.clientsInfo[changeClientId]['marker'] = undefined;
+                    var css = document.createElement('style');
+                    css.type = 'text/css';
+                    _this.updateCSSColor(css, changeClientId, _this.clientsInfo[changeClientId]['color']);
+                    document.body.appendChild(css);
+                    _this.clientsInfo[changeClientId]['css'] = css;
+                }
+                var Range_1 = ace.require('ace/range').Range;
+                var newMarker = session.addMarker(new Range_1(x, y, x, y + 1), "editor_cursor_" + changeClientId, true);
+                _this.clientsInfo[changeClientId]['marker'] = newMarker;
             }
-            else {
-                _this.clientsInfo[changeClientId] = {};
-                var css = document.createElement('style');
-                css.type = 'text/css';
-                css.innerHTML = ".editor_cursor_" + changeClientId + "\n                        { \n                          position:absolute;\n                          background:" + __WEBPACK_IMPORTED_MODULE_1__assets_colors__["a" /* COLORS */][_this.clientNum] + ";\n                          z-index:100;\n                          width:3px !important;\n                        }";
-                document.body.appendChild(css);
-                _this.clientNum++;
-            }
-            var Range = ace.require('ace/range').Range;
-            var newMarker = session.addMarker(new Range(x, y, x, y + 1), "editor_cursor_" + changeClientId, true);
-            _this.clientsInfo[changeClientId]['marker'] = newMarker;
         });
         this.collaborationSocket.on('cursorDelete', function (changeClientId) {
             // console.log('delete marker for:' + changeClientId);
             var session = editor.getSession();
             if (changeClientId in _this.clientsInfo) {
                 session.removeMarker(_this.clientsInfo[changeClientId]['marker']);
+                if ('css' in _this.clientsInfo[changeClientId]) {
+                    document.body.removeChild(_this.clientsInfo[changeClientId]['css']);
+                }
             }
         });
         this.collaborationSocket.on('langChange', function (language) {
@@ -1329,6 +1398,49 @@ var CollaborationService = (function () {
                 _this.problemEditor.setLanguageSoft(language);
             }
         });
+        this.collaborationSocket.on('loadUsers', function (users) {
+            _this.clientsInfo = JSON.parse(users);
+            _this.problemEditor.participants = _this.clientsInfo;
+        });
+        this.collaborationSocket.on('updateColor', function (updates) {
+            var updateInfo = JSON.parse(updates);
+            var uid = updateInfo['id'];
+            var color = updateInfo['color'];
+            if (uid in _this.clientsInfo) {
+                if (color != _this.clientsInfo[uid]['color']) {
+                    if ('css' in _this.clientsInfo[uid]) {
+                        _this.updateCSSColor(_this.clientsInfo[uid]['css'], uid, color);
+                    }
+                    _this.clientsInfo[uid]['color'] = color;
+                    _this.problemEditor.participants = _this.clientsInfo;
+                }
+            }
+        });
+        this.collaborationSocket.on('updateUserName', function (updates) {
+            var updateInfo = JSON.parse(updates);
+            var uid = updateInfo['id'];
+            var name = updateInfo['name'];
+            if (uid in _this.clientsInfo) {
+                _this.clientsInfo[uid]['name'] = name;
+                _this.problemEditor.participants = _this.clientsInfo;
+            }
+        });
+        this.collaborationSocket.on('addUser', function (user) {
+            var userInfo = JSON.parse(user);
+            var id = userInfo['id'];
+            var name = userInfo['name'];
+            var color = userInfo['color'];
+            delete _this.clientsInfo[id];
+            _this.clientsInfo[id] = { 'name': name, 'color': color };
+            _this.problemEditor.participants = _this.clientsInfo;
+        });
+        this.collaborationSocket.on('deleteUser', function (uid) {
+            delete _this.clientsInfo[uid];
+            _this.problemEditor.participants = _this.clientsInfo;
+        });
+    };
+    CollaborationService.prototype.updateCSSColor = function (css, uid, color) {
+        css.innerHTML = ".editor_cursor_" + uid + "\n                    { \n                      position:absolute;\n                      background:" + color + ";\n                      z-index:100;\n                      width:3px !important;\n                    }";
     };
     CollaborationService.prototype.languageSet = function (language) {
         this.collaborationSocket.emit('langSet', language);
@@ -1339,14 +1451,23 @@ var CollaborationService = (function () {
     CollaborationService.prototype.restoreBuffer = function () {
         this.collaborationSocket.emit('restoreBuffer');
     };
+    CollaborationService.prototype.restoreUsers = function () {
+        this.collaborationSocket.emit('restoreUser');
+    };
     CollaborationService.prototype.reset = function () {
         this.collaborationSocket.emit('reset');
     };
     CollaborationService.prototype.cursorMove = function (cursor) {
         this.collaborationSocket.emit('cursorMove', cursor);
     };
-    CollaborationService.prototype.register = function (user) {
-        this.collaborationSocket.emit('register', user);
+    CollaborationService.prototype.register = function (user, color) {
+        this.collaborationSocket.emit('register', JSON.stringify({ 'name': user, 'color': color }));
+    };
+    CollaborationService.prototype.updateColor = function (color) {
+        this.collaborationSocket.emit('updateColor', color);
+    };
+    CollaborationService.prototype.updateUserName = function (user) {
+        this.collaborationSocket.emit('updateUserName', user);
     };
     CollaborationService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
@@ -1461,6 +1582,7 @@ var DataService = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return COLORS; });
 var COLORS = [
+    "#ffa500",
     "#0000ff",
     "#a52a2a",
     "#00ffff",
@@ -1492,7 +1614,6 @@ var COLORS = [
     "#800000",
     "#000080",
     "#808000",
-    "#ffa500",
     "#ffc0cb",
     "#800080",
     "#800080",
@@ -1535,7 +1656,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* enableProdMode */])();
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_15" /* enableProdMode */])();
 }
 Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */])
     .catch(function (err) { return console.log(err); });
