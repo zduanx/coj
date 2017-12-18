@@ -22,6 +22,7 @@ import { CapitalizePipe } from './pipes/capitalize.pipe';
 
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './auth.guard';
+import { ProblemCommunicatorComponent } from './components/problem-communicator/problem-communicator.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AuthGuard } from './auth.guard';
     ProblemListFilterPipe,
     ProfilesComponent,
     ProblemEditorComponent,
-    CapitalizePipe
+    CapitalizePipe,
+    ProblemCommunicatorComponent
   ],
   imports: [
     BrowserModule,

@@ -193,12 +193,14 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pipes_capitalize_pipe__ = __webpack_require__("../../../../../src/app/pipes/capitalize.pipe.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__auth_guard__ = __webpack_require__("../../../../../src/app/auth.guard.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__components_problem_communicator_problem_communicator_component__ = __webpack_require__("../../../../../src/app/components/problem-communicator/problem-communicator.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -234,7 +236,8 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_16__pipes_problem_list_filter_pipe__["a" /* ProblemListFilterPipe */],
                 __WEBPACK_IMPORTED_MODULE_11__components_profiles_profiles_component__["a" /* ProfilesComponent */],
                 __WEBPACK_IMPORTED_MODULE_12__components_problem_editor_problem_editor_component__["a" /* ProblemEditorComponent */],
-                __WEBPACK_IMPORTED_MODULE_17__pipes_capitalize_pipe__["a" /* CapitalizePipe */]
+                __WEBPACK_IMPORTED_MODULE_17__pipes_capitalize_pipe__["a" /* CapitalizePipe */],
+                __WEBPACK_IMPORTED_MODULE_20__components_problem_communicator_problem_communicator_component__["a" /* ProblemCommunicatorComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -556,6 +559,71 @@ var NotFoundComponent = (function () {
 
 /***/ }),
 
+/***/ "../../../../../src/app/components/problem-communicator/problem-communicator.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/problem-communicator/problem-communicator.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row\">\n  <div class=\"col-sm-12\">\n    <h3>Participants</h3>\n    {{participants | json}}\n  </div>\n\n  <div class=\"col-sm-12\">\n    \n    {{participants | json}}\n  </div>\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/problem-communicator/problem-communicator.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProblemCommunicatorComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ProblemCommunicatorComponent = (function () {
+    function ProblemCommunicatorComponent() {
+    }
+    ProblemCommunicatorComponent.prototype.ngOnInit = function () {
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
+        __metadata("design:type", Object)
+    ], ProblemCommunicatorComponent.prototype, "participants", void 0);
+    ProblemCommunicatorComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+            selector: 'app-problem-communicator',
+            template: __webpack_require__("../../../../../src/app/components/problem-communicator/problem-communicator.component.html"),
+            styles: [__webpack_require__("../../../../../src/app/components/problem-communicator/problem-communicator.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], ProblemCommunicatorComponent);
+    return ProblemCommunicatorComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "../../../../../src/app/components/problem-detail/problem-detail.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -577,7 +645,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-detail/problem-detail.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <h2>\n    {{problem.id}}. {{problem.name}}\n  </h2>\n  <div class=\"{{ 'pull-left label diff-' + problem.difficulty.toLowerCase() }}\">\n      {{ problem.difficulty }}\n  </div>\n  <br>\n\n  <div class=\"row\">\n    <div class=\"col-sm-12 col-md-6\">\n      <div>\n        <h2>Description\n        </h2>\n        <p>\n          {{problem.desc}}\n        </p>\n      </div>\n    </div>\n    <div class=\"hidden-xs col-sm-12 col-md-6\">\n      <app-problem-editor></app-problem-editor>\n    </div>\n  </div>\n\n</div>"
+module.exports = "<div class=\"container\" *ngIf=\"problem\">\n  <h2>\n    {{problem.id}}. {{problem.name}}\n  </h2>\n  <div class=\"{{ 'pull-left label diff-' + problem.difficulty.toLowerCase() }}\">\n      {{ problem.difficulty }}\n  </div>\n  <br>\n\n  <div class=\"row\">\n    <div class=\"col-sm-12\">\n      <div>\n        <h2>Description\n        </h2>\n        <p>\n          {{problem.desc}}\n        </p>\n      </div>\n    </div>\n    <div class=\"hidden-xs col-sm-12\">\n      <app-problem-editor></app-problem-editor>\n    </div>\n  </div>\n\n</div>"
 
 /***/ }),
 
@@ -671,7 +739,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-editor/problem-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section>\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n    <h4>Build Results:</h4>\n    <div>\n      <p>{{buildoutput}}</p>\n      <p>{{runoutput}}</p>\n    </div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</section>"
+module.exports = "<section>\n<div class=\"row\">\n\n<div class=\"col-md-6 col-sm-12\">\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n    <h4>Build Results:</h4>\n    <div>\n      <p>{{buildoutput}}</p>\n      <p>{{runoutput}}</p>\n    </div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</div>\n\n<div class=\"col-sm-12 col-md-6\">\n  <app-problem-communicator [participants]=\"participants\"></app-problem-communicator>\n</div>\n</div>\n</section>"
 
 /***/ }),
 
@@ -707,6 +775,8 @@ var ProblemEditorComponent = (function () {
         this.auth = auth;
         this.buildoutput = '';
         this.runoutput = '';
+        this.participants = {};
+        this.user = 'anonymous';
     }
     ProblemEditorComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -715,8 +785,15 @@ var ProblemEditorComponent = (function () {
             _this.initParam();
             _this.initEditor();
             _this.initSocket();
+            _this.initUser();
             _this.collaboration.restoreBuffer();
         });
+    };
+    ProblemEditorComponent.prototype.initUser = function () {
+        if (this.auth.userProfile) {
+            this.user = this.auth.userProfile.email;
+        }
+        this.collaboration.register(this.user);
     };
     ProblemEditorComponent.prototype.initParam = function () {
         this.changeGuard = false;
@@ -1267,6 +1344,9 @@ var CollaborationService = (function () {
     };
     CollaborationService.prototype.cursorMove = function (cursor) {
         this.collaborationSocket.emit('cursorMove', cursor);
+    };
+    CollaborationService.prototype.register = function (user) {
+        this.collaborationSocket.emit('register', user);
     };
     CollaborationService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),

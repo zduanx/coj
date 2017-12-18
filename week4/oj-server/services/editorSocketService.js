@@ -6,7 +6,7 @@ module.exports = function(io) {
     // collaboration sessions
     const collaborations = {};
     // {
-    //     participants: [1,2,3,4,5]
+    //     participants: {$id:[$name, $color]}
     // }
 
     // map from socketId to sessionid
@@ -15,10 +15,11 @@ module.exports = function(io) {
 
     io.on('connection', (socket)=>{
         const sessionId = socket.handshake.query['sessionId'];
+        const sid = socket.id;
         socketIdToSessionId[socket.id] = sessionId;
 
         if(sessionId in collaborations){
-            collaborations[sessionId]['participants'].push(socket.id);
+            collaborations[sessionId]['participants'][sid] = ['',''];
             io.to(socket.id).emit('langChange', collaborations[sessionId]['language']);
         } else{
             redisClient.get(sessionPath + '/' + sessionId, data =>{
@@ -28,7 +29,7 @@ module.exports = function(io) {
                     collaborations[sessionId] = {
                         'cachedInstructions': data['inst'],
                         'language': data['lang'],
-                        'participants': []
+                        'participants': {}
                     }
                     // console.log(collaborations);
                 } else{
@@ -36,10 +37,10 @@ module.exports = function(io) {
                     collaborations[sessionId] = {
                         'cachedInstructions': [],
                         'language': "",
-                        'participants': []
+                        'participants': {}
                     }
                 } 
-                collaborations[sessionId]['participants'].push(socket.id);
+                collaborations[sessionId]['participants'][sid] = ['',''];
                 io.to(socket.id).emit('langChange', collaborations[sessionId]['language']);
             })
         }
@@ -91,18 +92,25 @@ module.exports = function(io) {
             }
         });
 
+        socket.on('register', (user)=>{
+            const sessionId = socketIdToSessionId[socket.id];
+            if(sessionId in collaborations){
+
+            }
+            forwardEvent(socket.id, 'addUser', JSON.stringify({'id': socket.id, 'name': user, 'color': ''}));
+        });
+
         socket.on('disconnect', () =>{
             forwardEvent(socket.id, 'cursorDelete', socket.id);
             const sessionId = socketIdToSessionId[socket.id];
             let foundAndRemove = false;
             if(sessionId in collaborations){
                 const participants = collaborations[sessionId]['participants'];
-                const index = participants.indexOf(socket.id);
-                delete(socketIdToSessionId[socket.id]);
-                if(index >= 0){
-                    participants.splice(index, 1);
+                foundAndRemove = socket.id in participants;
+                if(foundAndRemove){
+                    delete participants[socket.id];
                     foundAndRemove = true; 
-                    if(participants.length == 0){
+                    if(Object.keys(participants).length == 0){
                         const key = sessionPath + '/' + sessionId;
                         const value = JSON.stringify({'inst': collaborations[sessionId]['cachedInstructions'], 'lang': collaborations[sessionId]['language']});
                         redisClient.set(key, value, redisClient.redisPrint);
@@ -123,7 +131,7 @@ module.exports = function(io) {
         const sessionId = socketIdToSessionId[socketId];
         if (sessionId in collaborations) {
             const participants = collaborations[sessionId]['participants'];
-            for(let participant of participants) {
+            for(let participant of Object.keys(participants)) {
                 if (socketId != participant) {
                     io.to(participant).emit(eventName, dataString);
                 }

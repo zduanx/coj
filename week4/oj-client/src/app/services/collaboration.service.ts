@@ -93,4 +93,8 @@ export class CollaborationService {
   cursorMove(cursor: string) {
     this.collaborationSocket.emit('cursorMove', cursor);
   }
+
+  register(user: string){
+    this.collaborationSocket.emit('register', user);
+  }
 }

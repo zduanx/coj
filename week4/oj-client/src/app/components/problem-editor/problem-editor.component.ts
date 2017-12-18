@@ -27,6 +27,9 @@ export class ProblemEditorComponent implements OnInit {
   buildoutput: string = '';
   runoutput: string = '';
 
+  participants: any = {};
+  user: string = 'anonymous';
+
   constructor(
     private collaboration: CollaborationService,
     private dataService: DataService,
@@ -40,8 +43,16 @@ export class ProblemEditorComponent implements OnInit {
       this.initParam();
       this.initEditor();
       this.initSocket();
+      this.initUser();
       this.collaboration.restoreBuffer();
     });
+  }
+
+  initUser(): void {
+    if (this.auth.userProfile) {
+      this.user = this.auth.userProfile.email;
+    }
+    this.collaboration.register(this.user);
   }
 
   initParam(): void {
