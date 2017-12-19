@@ -55,18 +55,6 @@ export class CollaborationService {
       }
     });
     
-    this.collaborationSocket.on('cursorDelete', (changeClientId: string) => {
-      // console.log('delete marker for:' + changeClientId);
-      const session = editor.getSession();
-
-      if (changeClientId in this.clientsInfo) {
-        session.removeMarker(this.clientsInfo[changeClientId]['marker']);
-        if('css' in this.clientsInfo[changeClientId]){
-          document.body.removeChild(this.clientsInfo[changeClientId]['css']);
-        }
-      }
-    });
-
     this.collaborationSocket.on('langChange', (language: string) => {
       console.log(`>> collaboration.service: socket request to change language ->${language}<-`);
       if(!language){
@@ -75,11 +63,6 @@ export class CollaborationService {
       else{
         this.problemEditor.setLanguageSoft(language);
       }
-    });
-
-    this.collaborationSocket.on('loadUsers', (users: string) => {
-      this.clientsInfo = JSON.parse(users);
-      this.problemEditor.participants = this.clientsInfo;
     });
 
     this.collaborationSocket.on('updateColor', (updates: string) => {
@@ -92,7 +75,7 @@ export class CollaborationService {
             this.updateCSSColor(this.clientsInfo[uid]['css'], uid, color);
           }
           this.clientsInfo[uid]['color'] = color;
-          this.problemEditor.participants = this.clientsInfo;
+          this.problemEditor.commuSubject.next(['participants', 'updateColor', updates]);
         }
       }
     });
@@ -103,7 +86,7 @@ export class CollaborationService {
       const name = updateInfo['name'];
       if(uid in this.clientsInfo){
         this.clientsInfo[uid]['name'] = name;
-        this.problemEditor.participants = this.clientsInfo;
+        this.problemEditor.commuSubject.next(['participants', 'updateName', updates]);
       }
     });
 
@@ -114,12 +97,20 @@ export class CollaborationService {
       const color = userInfo['color']
       delete this.clientsInfo[id];
       this.clientsInfo[id] = {'name': name, 'color': color};
-      this.problemEditor.participants = this.clientsInfo;
+      this.problemEditor.commuSubject.next(['participants', 'addUser', user]);
     });
 
-    this.collaborationSocket.on('deleteUser', (uid: string) => {
-      delete this.clientsInfo[uid];
-      this.problemEditor.participants = this.clientsInfo;
+    this.collaborationSocket.on('deleteUser', (changeClientId: string) => {
+      const session = editor.getSession();
+
+      if (changeClientId in this.clientsInfo) {
+        session.removeMarker(this.clientsInfo[changeClientId]['marker']);
+        if('css' in this.clientsInfo[changeClientId]){
+          document.body.removeChild(this.clientsInfo[changeClientId]['css']);
+        }
+      }
+      delete this.clientsInfo[changeClientId];
+      this.problemEditor.commuSubject.next(['participants', 'deleteUser', changeClientId]);
     });
   }
 
@@ -168,4 +159,9 @@ export class CollaborationService {
   updateUserName(user: string){
     this.collaborationSocket.emit('updateUserName', user);
   }
+
+  deleteMyself(){
+    this.collaborationSocket.emit('deleteMyself');
+  }
+
 }

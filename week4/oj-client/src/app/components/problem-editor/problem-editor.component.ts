@@ -33,7 +33,6 @@ export class ProblemEditorComponent implements OnInit {
   buildoutput: string = '';
   runoutput: string = '';
 
-  participants: any = {};
   user: string;
 
   availableColors = COLORS;
@@ -41,7 +40,12 @@ export class ProblemEditorComponent implements OnInit {
 
   // this is used to monitor localStorageChange
   private onSubject = new Subject<{key: string, value: any}>();
-  public changes = this.onSubject.asObservable().share();
+  changes = this.onSubject.asObservable().share();
+  localStorageSub: Subscription;
+  
+  // this is used to communicate chat message and user list
+  commuSubject = new Subject<[string, string, string]>();
+  observables: Observable<[string, string, string]> = this.commuSubject.asObservable().share();
 
   constructor(
     private collaboration: CollaborationService,
@@ -53,7 +57,10 @@ export class ProblemEditorComponent implements OnInit {
   }
 
   ngOnDestroy(){
+    console.log('logging out');
     this.monitorStop();
+    this.commuSubject.complete();
+    this.collaboration.deleteMyself();
   }
 
   ngOnInit() {
@@ -65,7 +72,7 @@ export class ProblemEditorComponent implements OnInit {
       this.registerUser();
       this.collaboration.restoreUsers();
       this.collaboration.restoreBuffer();
-      this.handleLocalStorageChange();
+      this.initSubscriptions();
     });
   }
 
@@ -75,6 +82,8 @@ export class ProblemEditorComponent implements OnInit {
 
   monitorStop(){
     window.removeEventListener("storage", this.storageEventListener.bind(this));
+    this.localStorageSub.unsubscribe();
+
     this.onSubject.complete();
   }
 
@@ -87,8 +96,8 @@ export class ProblemEditorComponent implements OnInit {
     }
   }
 
-  handleLocalStorageChange(){
-    this.changes.subscribe(
+  initSubscriptions(){
+    this.localStorageSub = this.changes.subscribe(
       value => {
         if(value.key === 'user_profile_coj'){
           this.getUserName();
@@ -176,6 +185,7 @@ export class ProblemEditorComponent implements OnInit {
 
   setTheme() {
     const userCode = this.editor.getValue();
+    this.changeGuard = true;
     this.editor.setTheme(`ace/theme/${this.theme}`);
     this.editor.setValue(userCode);
     this.editor.clearSelection();

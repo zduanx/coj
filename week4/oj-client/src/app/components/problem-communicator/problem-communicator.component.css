@@ -1,0 +1,13 @@
+.userList{
+    height: 200px;
+    overflow: auto;
+}
+
+.userColor{
+    width: 2.5em;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-indent: -9999px;
+    border-radius: 1.25em;
+}

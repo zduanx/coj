@@ -57,7 +57,6 @@ module.exports = function(io) {
 
         socket.on('change', delta =>{
             const sessionId = socketIdToSessionId[socket.id];
-            console.log(this.collaborations);
             if(sessionId in collaborations){
                 collaborations[sessionId]['cachedInstructions'].push(['change', delta, Date.now()]);
             }
@@ -102,11 +101,12 @@ module.exports = function(io) {
             }
         });
 
+        // following two function will also notify sender
         socket.on('updateColor', (color)=>{
             const sessionId = socketIdToSessionId[socket.id];
             if(sessionId in collaborations && socket.id in collaborations[sessionId]['participants']){
                 collaborations[sessionId]['participants'][socket.id]['color'] = color;
-                forwardEvent(socket.id, 'updateColor', JSON.stringify({'id': socket.id, 'color': color}));
+                forwardEventAll(socket.id, 'updateColor', JSON.stringify({'id': socket.id, 'color': color}));
             }
         });
 
@@ -118,10 +118,20 @@ module.exports = function(io) {
             }
         });
 
+        // load all existing users
         socket.on('restoreUser', ()=>{
             const sessionId = socketIdToSessionId[socket.id];
             if(sessionId in collaborations){
-                io.to(socket.id).emit('loadUsers', JSON.stringify(collaborations[sessionId]['participants']));
+                for(let uid of Object.keys(collaborations[sessionId]['participants'])){
+                    io.to(socket.id).emit(
+                        'addUser', 
+                        JSON.stringify({
+                            'id': uid,
+                            'name': collaborations[sessionId]['participants'][uid]['name'],
+                            'color': collaborations[sessionId]['participants'][uid]['color']
+                        })
+                    );
+                }
             }
         });
 
@@ -129,18 +139,31 @@ module.exports = function(io) {
             io.to(socket.id).emit('querySID', socket.id);
         });
 
-        socket.on('disconnect', () =>{
-            forwardEvent(socket.id, 'cursorDelete', socket.id);
+        socket.on('deleteMyself', ()=>{
             forwardEvent(socket.id, 'deleteUser', socket.id);
-            const sessionId = socketIdToSessionId[socket.id];
+            cleanUpId(socket.id);
+        });
+
+        socket.on('disconnect', () =>{
+            forwardEvent(socket.id, 'deleteUser', socket.id);
+            cleanUpId(socket.id);
+        });
+    });
+
+    const cleanUpId = function(socketId){
+        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+        if(socketId in socketIdToSessionId){
+            const sessionId = socketIdToSessionId[socketId];
+            delete socketIdToSessionId[socketId];
             let foundAndRemove = false;
             if(sessionId in collaborations){
                 const participants = collaborations[sessionId]['participants'];
-                foundAndRemove = socket.id in participants;
+                foundAndRemove = socketId in participants;
                 if(foundAndRemove){
-                    delete participants[socket.id];
+                    delete participants[socketId];
                     foundAndRemove = true; 
                     if(Object.keys(participants).length == 0){
+                        console.log('>> editorSocketService: everyone left, save redis for id:' + sessionId);
                         const key = sessionPath + '/' + sessionId;
                         const value = JSON.stringify({'inst': collaborations[sessionId]['cachedInstructions'], 'lang': collaborations[sessionId]['language']});
                         redisClient.set(key, value, redisClient.redisPrint);
@@ -151,10 +174,10 @@ module.exports = function(io) {
                 // console.log(collaborations);
             }
             if(!foundAndRemove){
-                console.error('sessionId not exist for user:' + socket.id + ' at session:' + sessionId);
+                console.error('sessionId not exist for user:' + socketId + ' at session:' + sessionId);
             }
-        });
-    });
+        }
+    };
 
     // from payson
     const forwardEvent = function(socketId, eventName, dataString) {

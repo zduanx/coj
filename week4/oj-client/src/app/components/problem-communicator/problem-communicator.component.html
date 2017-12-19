@@ -1,7 +1,14 @@
 <div class="row">
   <div class="col-sm-12">
     <h3>Participants</h3>
-    {{participants | json}}
+    <div *ngIf="userList" class="userList">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let user of userList">
+          <span class="btn btn-default userColor" [style.backgroundColor]="user.color" >{{user.color}}</span>
+          <span>{{user.name}}</span>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div class="col-sm-12">

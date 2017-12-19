@@ -570,7 +570,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".userList{\n    height: 200px;\n    overflow: auto;\n}\n\n.userColor{\n    width: 2.5em;\n    text-align: left;\n    white-space: nowrap;\n    overflow: hidden;\n    text-indent: -9999px;\n    border-radius: 1.25em;\n}", ""]);
 
 // exports
 
@@ -583,7 +583,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-communicator/problem-communicator.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-sm-12\">\n    <h3>Participants</h3>\n    {{participants | json}}\n  </div>\n\n  <div class=\"col-sm-12\">\n    \n    haha\n  </div>\n</div>"
+module.exports = "<div class=\"row\">\n  <div class=\"col-sm-12\">\n    <h3>Participants</h3>\n    <div *ngIf=\"userList\" class=\"userList\">\n      <ul class=\"list-group\">\n        <li class=\"list-group-item\" *ngFor=\"let user of userList\">\n          <span class=\"btn btn-default userColor\" [style.backgroundColor]=\"user.color\" >{{user.color}}</span>\n          <span>{{user.name}}</span>\n        </li>\n      </ul>\n    </div>\n  </div>\n\n  <div class=\"col-sm-12\">\n    \n    haha\n  </div>\n</div>"
 
 /***/ }),
 
@@ -593,6 +593,7 @@ module.exports = "<div class=\"row\">\n  <div class=\"col-sm-12\">\n    <h3>Part
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProblemCommunicatorComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -603,15 +604,79 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var ProblemCommunicatorComponent = (function () {
     function ProblemCommunicatorComponent() {
+        this.userList = [];
+        this.messageList = [];
     }
     ProblemCommunicatorComponent.prototype.ngOnInit = function () {
+        this.initSubscriptions();
+    };
+    ProblemCommunicatorComponent.prototype.ngOnDestroy = function () {
+        this.subscription.unsubscribe();
+    };
+    ProblemCommunicatorComponent.prototype.initSubscriptions = function () {
+        var _this = this;
+        this.subscription = this.observables.subscribe(function (val) {
+            var type = val[0];
+            var operation = val[1];
+            var data = val[2];
+            console.log(val);
+            switch (type) {
+                case 'participants':
+                    switch (operation) {
+                        case 'updateColor':
+                            _this.updateColor(data);
+                            break;
+                        case 'updateName':
+                            _this.updateName(data);
+                            break;
+                        case 'addUser':
+                            _this.addUser(data);
+                            break;
+                        case 'deleteUser':
+                            _this.deleteUser(data);
+                            break;
+                        default:
+                    }
+                    break;
+                case 'messages':
+                    break;
+                default:
+            }
+        });
+    };
+    ProblemCommunicatorComponent.prototype.updateColor = function (data) {
+        var info = JSON.parse(data);
+        var idList = this.userList.map(function (elem) { return elem.id; });
+        var index = idList.indexOf(info.id);
+        if (index >= 0) {
+            this.userList[index].color = info.color;
+        }
+    };
+    ProblemCommunicatorComponent.prototype.updateName = function (data) {
+        var info = JSON.parse(data);
+        var idList = this.userList.map(function (elem) { return elem.id; });
+        var index = idList.indexOf(info.id);
+        if (index >= 0) {
+            this.userList[index].name = info.name;
+        }
+    };
+    ProblemCommunicatorComponent.prototype.addUser = function (data) {
+        this.userList.push(JSON.parse(data));
+    };
+    ProblemCommunicatorComponent.prototype.deleteUser = function (data) {
+        var idList = this.userList.map(function (elem) { return elem.id; });
+        var index = idList.indexOf(data);
+        if (index >= 0) {
+            this.userList.splice(index, 1);
+        }
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
-        __metadata("design:type", Object)
-    ], ProblemCommunicatorComponent.prototype, "participants", void 0);
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */])
+    ], ProblemCommunicatorComponent.prototype, "observables", void 0);
     ProblemCommunicatorComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'app-problem-communicator',
@@ -742,7 +807,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-editor/problem-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section>\n<div class=\"row\">\n\n<div class=\"col-md-6 col-sm-12\">\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n    <button class=\"btn btn-default btn-color\" [(colorPicker)]=\"color\"\n    [cpPosition]=\"'bottom'\"\n    [style.backgroundColor]=\"color\"\n    [cpPositionOffset]=\"'50%'\"\n    [cpPresetColors]=\"availableColors\"\n    [cpPositionRelativeToArrow]=\"true\"\n    [cpOKButton]=\"true\"\n    [cpSaveClickOutside]=\"false\"\n    [cpOKButtonClass]= \"'btn btn-primary btn-xs'\"\n    (colorPickerSelect)=\"changeColor()\">color</button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n    <h4>Build Results:</h4>\n    <div>\n      <p>{{buildoutput}}</p>\n      <p>{{runoutput}}</p>\n    </div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</div>\n\n<div class=\"col-sm-12 col-md-6\">\n  <app-problem-communicator [participants]=\"participants\"></app-problem-communicator>\n</div>\n</div>\n</section>"
+module.exports = "<section>\n<div class=\"row\">\n\n<div class=\"col-md-6 col-sm-12\">\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n    <button class=\"btn btn-default btn-color\" [(colorPicker)]=\"color\"\n    [cpPosition]=\"'bottom'\"\n    [style.backgroundColor]=\"color\"\n    [cpPositionOffset]=\"'50%'\"\n    [cpPresetColors]=\"availableColors\"\n    [cpPositionRelativeToArrow]=\"true\"\n    [cpOKButton]=\"true\"\n    [cpSaveClickOutside]=\"false\"\n    [cpOKButtonClass]= \"'btn btn-primary btn-xs'\"\n    (colorPickerSelect)=\"changeColor()\">color</button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n    <h4>Build Results:</h4>\n    <div>\n      <p>{{buildoutput}}</p>\n      <p>{{runoutput}}</p>\n    </div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</div>\n\n<div class=\"col-sm-12 col-md-6\">\n  <app-problem-communicator [observables]=\"observables\"></app-problem-communicator>\n</div>\n</div>\n</section>"
 
 /***/ }),
 
@@ -784,16 +849,21 @@ var ProblemEditorComponent = (function () {
         this.auth = auth;
         this.buildoutput = '';
         this.runoutput = '';
-        this.participants = {};
         this.availableColors = __WEBPACK_IMPORTED_MODULE_5__assets_colors__["a" /* COLORS */];
         this.color = __WEBPACK_IMPORTED_MODULE_5__assets_colors__["a" /* COLORS */][0];
         // this is used to monitor localStorageChange
         this.onSubject = new __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__["a" /* Subject */]();
         this.changes = this.onSubject.asObservable().share();
+        // this is used to communicate chat message and user list
+        this.commuSubject = new __WEBPACK_IMPORTED_MODULE_6_rxjs_Subject__["a" /* Subject */]();
+        this.observables = this.commuSubject.asObservable().share();
         this.monitorStart();
     }
     ProblemEditorComponent.prototype.ngOnDestroy = function () {
+        console.log('logging out');
         this.monitorStop();
+        this.commuSubject.complete();
+        this.collaboration.deleteMyself();
     };
     ProblemEditorComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -805,7 +875,7 @@ var ProblemEditorComponent = (function () {
             _this.registerUser();
             _this.collaboration.restoreUsers();
             _this.collaboration.restoreBuffer();
-            _this.handleLocalStorageChange();
+            _this.initSubscriptions();
         });
     };
     ProblemEditorComponent.prototype.monitorStart = function () {
@@ -813,6 +883,7 @@ var ProblemEditorComponent = (function () {
     };
     ProblemEditorComponent.prototype.monitorStop = function () {
         window.removeEventListener("storage", this.storageEventListener.bind(this));
+        this.localStorageSub.unsubscribe();
         this.onSubject.complete();
     };
     ProblemEditorComponent.prototype.storageEventListener = function (event) {
@@ -827,9 +898,9 @@ var ProblemEditorComponent = (function () {
             this.onSubject.next({ key: event.key, value: v });
         }
     };
-    ProblemEditorComponent.prototype.handleLocalStorageChange = function () {
+    ProblemEditorComponent.prototype.initSubscriptions = function () {
         var _this = this;
-        this.changes.subscribe(function (value) {
+        this.localStorageSub = this.changes.subscribe(function (value) {
             if (value.key === 'user_profile_coj') {
                 _this.getUserName();
                 _this.collaboration.updateUserName(_this.user);
@@ -905,6 +976,7 @@ var ProblemEditorComponent = (function () {
     };
     ProblemEditorComponent.prototype.setTheme = function () {
         var userCode = this.editor.getValue();
+        this.changeGuard = true;
         this.editor.setTheme("ace/theme/" + this.theme);
         this.editor.setValue(userCode);
         this.editor.clearSelection();
@@ -1379,16 +1451,6 @@ var CollaborationService = (function () {
                 _this.clientsInfo[changeClientId]['marker'] = newMarker;
             }
         });
-        this.collaborationSocket.on('cursorDelete', function (changeClientId) {
-            // console.log('delete marker for:' + changeClientId);
-            var session = editor.getSession();
-            if (changeClientId in _this.clientsInfo) {
-                session.removeMarker(_this.clientsInfo[changeClientId]['marker']);
-                if ('css' in _this.clientsInfo[changeClientId]) {
-                    document.body.removeChild(_this.clientsInfo[changeClientId]['css']);
-                }
-            }
-        });
         this.collaborationSocket.on('langChange', function (language) {
             console.log(">> collaboration.service: socket request to change language ->" + language + "<-");
             if (!language) {
@@ -1397,10 +1459,6 @@ var CollaborationService = (function () {
             else {
                 _this.problemEditor.setLanguageSoft(language);
             }
-        });
-        this.collaborationSocket.on('loadUsers', function (users) {
-            _this.clientsInfo = JSON.parse(users);
-            _this.problemEditor.participants = _this.clientsInfo;
         });
         this.collaborationSocket.on('updateColor', function (updates) {
             var updateInfo = JSON.parse(updates);
@@ -1412,7 +1470,7 @@ var CollaborationService = (function () {
                         _this.updateCSSColor(_this.clientsInfo[uid]['css'], uid, color);
                     }
                     _this.clientsInfo[uid]['color'] = color;
-                    _this.problemEditor.participants = _this.clientsInfo;
+                    _this.problemEditor.commuSubject.next(['participants', 'updateColor', updates]);
                 }
             }
         });
@@ -1422,7 +1480,7 @@ var CollaborationService = (function () {
             var name = updateInfo['name'];
             if (uid in _this.clientsInfo) {
                 _this.clientsInfo[uid]['name'] = name;
-                _this.problemEditor.participants = _this.clientsInfo;
+                _this.problemEditor.commuSubject.next(['participants', 'updateName', updates]);
             }
         });
         this.collaborationSocket.on('addUser', function (user) {
@@ -1432,11 +1490,18 @@ var CollaborationService = (function () {
             var color = userInfo['color'];
             delete _this.clientsInfo[id];
             _this.clientsInfo[id] = { 'name': name, 'color': color };
-            _this.problemEditor.participants = _this.clientsInfo;
+            _this.problemEditor.commuSubject.next(['participants', 'addUser', user]);
         });
-        this.collaborationSocket.on('deleteUser', function (uid) {
-            delete _this.clientsInfo[uid];
-            _this.problemEditor.participants = _this.clientsInfo;
+        this.collaborationSocket.on('deleteUser', function (changeClientId) {
+            var session = editor.getSession();
+            if (changeClientId in _this.clientsInfo) {
+                session.removeMarker(_this.clientsInfo[changeClientId]['marker']);
+                if ('css' in _this.clientsInfo[changeClientId]) {
+                    document.body.removeChild(_this.clientsInfo[changeClientId]['css']);
+                }
+            }
+            delete _this.clientsInfo[changeClientId];
+            _this.problemEditor.commuSubject.next(['participants', 'deleteUser', changeClientId]);
         });
     };
     CollaborationService.prototype.updateCSSColor = function (css, uid, color) {
@@ -1468,6 +1533,9 @@ var CollaborationService = (function () {
     };
     CollaborationService.prototype.updateUserName = function (user) {
         this.collaborationSocket.emit('updateUserName', user);
+    };
+    CollaborationService.prototype.deleteMyself = function () {
+        this.collaborationSocket.emit('deleteMyself');
     };
     CollaborationService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
@@ -1584,42 +1652,24 @@ var DataService = (function () {
 var COLORS = [
     "#ffa500",
     "#0000ff",
-    "#a52a2a",
     "#00ffff",
     "#00008b",
-    "#008b8b",
     "#a9a9a9",
-    "#006400",
     "#bdb76b",
-    "#8b008b",
     "#556b2f",
     "#ff8c00",
     "#9932cc",
-    "#8b0000",
-    "#e9967a",
-    "#9400d3",
-    "#ff00ff",
-    "#ffd700",
     "#008000",
     "#4b0082",
-    "#f0e68c",
-    "#add8e6",
     "#e0ffff",
     "#90ee90",
     "#d3d3d3",
-    "#ffb6c1",
     "#ffffe0",
-    "#00ff00",
     "#ff00ff",
     "#800000",
     "#000080",
-    "#808000",
     "#ffc0cb",
     "#800080",
-    "#800080",
-    "#ff0000",
-    "#c0c0c0",
-    "#ffffff",
     "#ffff00"
 ];
 
