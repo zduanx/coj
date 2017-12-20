@@ -28,7 +28,7 @@ export class ProblemListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loginInfo = "Please login to trigger add-problem, profile functionality";
+    this.loginInfo = "Please login to add problem, view profile and submit codes";
     this.sampleAccount = "Sample account: root@coj.com password: root";
 
     this.getProblems();
