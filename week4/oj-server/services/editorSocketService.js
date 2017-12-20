@@ -139,6 +139,11 @@ module.exports = function(io) {
             io.to(socket.id).emit('querySID', socket.id);
         });
 
+        socket.on('sendChat', (data)=>{
+            forwardEventAll(socket.id, 'receiveChat', JSON.stringify({'id': socket.id, 'data': data}));
+        });
+
+
         socket.on('deleteMyself', ()=>{
             forwardEvent(socket.id, 'deleteUser', socket.id);
             cleanUpId(socket.id);
@@ -151,7 +156,7 @@ module.exports = function(io) {
     });
 
     const cleanUpId = function(socketId){
-        console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+        // console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
         if(socketId in socketIdToSessionId){
             const sessionId = socketIdToSessionId[socketId];
             delete socketIdToSessionId[socketId];

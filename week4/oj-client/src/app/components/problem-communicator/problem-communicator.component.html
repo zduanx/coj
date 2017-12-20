@@ -12,7 +12,21 @@
   </div>
 
   <div class="col-sm-12">
-    
-    haha
+    <h3>Chat</h3>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <textarea 
+            [(ngModel)]="chatWords"
+            class="chat-line form-control" 
+            placeholder="Type here to chat" 
+            rows="3" 
+            id="comment" 
+            (keypress)="sendChat($event)"
+            (keyup)="clearChat()">
+          </textarea>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

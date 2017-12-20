@@ -570,7 +570,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".userList{\n    height: 200px;\n    overflow: auto;\n}\n\n.userColor{\n    width: 2.5em;\n    text-align: left;\n    white-space: nowrap;\n    overflow: hidden;\n    text-indent: -9999px;\n    border-radius: 1.25em;\n}", ""]);
+exports.push([module.i, ".userList{\n    height: 200px;\n    overflow: auto;\n}\n\n.userColor{\n    width: 2.5em;\n    text-align: left;\n    white-space: nowrap;\n    overflow: hidden;\n    text-indent: -9999px;\n    border-radius: 1.25em;\n}\n\n.chat-line{\n    resize: none;\n}", ""]);
 
 // exports
 
@@ -583,7 +583,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-communicator/problem-communicator.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-sm-12\">\n    <h3>Participants</h3>\n    <div *ngIf=\"userList\" class=\"userList\">\n      <ul class=\"list-group\">\n        <li class=\"list-group-item\" *ngFor=\"let user of userList\">\n          <span class=\"btn btn-default userColor\" [style.backgroundColor]=\"user.color\" >{{user.color}}</span>\n          <span>{{user.name}}</span>\n        </li>\n      </ul>\n    </div>\n  </div>\n\n  <div class=\"col-sm-12\">\n    \n    haha\n  </div>\n</div>"
+module.exports = "<div class=\"row\">\n  <div class=\"col-sm-12\">\n    <h3>Participants</h3>\n    <div *ngIf=\"userList\" class=\"userList\">\n      <ul class=\"list-group\">\n        <li class=\"list-group-item\" *ngFor=\"let user of userList\">\n          <span class=\"btn btn-default userColor\" [style.backgroundColor]=\"user.color\" >{{user.color}}</span>\n          <span>{{user.name}}</span>\n        </li>\n      </ul>\n    </div>\n  </div>\n\n  <div class=\"col-sm-12\">\n    <h3>Chat</h3>\n    <div class=\"row\">\n      <div class=\"col-sm-12\">\n        <div class=\"form-group\">\n          <textarea \n            [(ngModel)]=\"chatWords\"\n            class=\"chat-line form-control\" \n            placeholder=\"Type here to chat\" \n            rows=\"3\" \n            id=\"comment\" \n            (keypress)=\"sendChat($event)\"\n            (keyup)=\"clearChat()\">\n          </textarea>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -607,8 +607,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var ProblemCommunicatorComponent = (function () {
     function ProblemCommunicatorComponent() {
+        this.notify = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
         this.userList = [];
         this.messageList = [];
+        this.chatWords = '';
+        this.clear = false;
     }
     ProblemCommunicatorComponent.prototype.ngOnInit = function () {
         this.initSubscriptions();
@@ -642,10 +645,17 @@ var ProblemCommunicatorComponent = (function () {
                     }
                     break;
                 case 'messages':
+                    _this.updateChat(data);
                     break;
                 default:
             }
         });
+    };
+    ProblemCommunicatorComponent.prototype.updateChat = function (data) {
+        var info = JSON.parse(data);
+        var id = info.id;
+        var message = info.data;
+        console.log(info);
     };
     ProblemCommunicatorComponent.prototype.updateColor = function (data) {
         var info = JSON.parse(data);
@@ -673,10 +683,29 @@ var ProblemCommunicatorComponent = (function () {
             this.userList.splice(index, 1);
         }
     };
+    ProblemCommunicatorComponent.prototype.sendChat = function (e) {
+        if (e.charCode === 13 && !e.shiftKey) {
+            var wordsToSend = this.chatWords.trim();
+            this.clear = true;
+            if (wordsToSend) {
+                this.notify.emit(wordsToSend);
+            }
+        }
+    };
+    ProblemCommunicatorComponent.prototype.clearChat = function () {
+        if (this.clear) {
+            this.chatWords = '';
+            this.clear = false;
+        }
+    };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["a" /* Observable */])
     ], ProblemCommunicatorComponent.prototype, "observables", void 0);
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Output */])(),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */])
+    ], ProblemCommunicatorComponent.prototype, "notify", void 0);
     ProblemCommunicatorComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'app-problem-communicator',
@@ -807,7 +836,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-editor/problem-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section>\n<div class=\"row\">\n\n<div class=\"col-md-6 col-sm-12\">\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n    <button class=\"btn btn-default btn-color\" [(colorPicker)]=\"color\"\n    [cpPosition]=\"'bottom'\"\n    [style.backgroundColor]=\"color\"\n    [cpPositionOffset]=\"'50%'\"\n    [cpPresetColors]=\"availableColors\"\n    [cpPositionRelativeToArrow]=\"true\"\n    [cpOKButton]=\"true\"\n    [cpSaveClickOutside]=\"false\"\n    [cpOKButtonClass]= \"'btn btn-primary btn-xs'\"\n    (colorPickerSelect)=\"changeColor()\">color</button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n    <h4>Build Results:</h4>\n    <div>\n      <p>{{buildoutput}}</p>\n      <p>{{runoutput}}</p>\n    </div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</div>\n\n<div class=\"col-sm-12 col-md-6\">\n  <app-problem-communicator [observables]=\"observables\"></app-problem-communicator>\n</div>\n</div>\n</section>"
+module.exports = "<section>\n<div class=\"row\">\n\n<div class=\"col-md-6 col-sm-12\">\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n    <button class=\"btn btn-default btn-color\" [(colorPicker)]=\"color\"\n    [cpPosition]=\"'bottom'\"\n    [style.backgroundColor]=\"color\"\n    [cpPositionOffset]=\"'50%'\"\n    [cpPresetColors]=\"availableColors\"\n    [cpPositionRelativeToArrow]=\"true\"\n    [cpOKButton]=\"true\"\n    [cpSaveClickOutside]=\"false\"\n    [cpOKButtonClass]= \"'btn btn-primary btn-xs'\"\n    (colorPickerSelect)=\"changeColor()\">color</button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n    <h4>Build Results:</h4>\n    <div>\n      <p>{{buildoutput}}</p>\n      <p>{{runoutput}}</p>\n    </div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</div>\n\n<div class=\"col-sm-12 col-md-6\">\n  <app-problem-communicator [observables]=\"observables\" (notify)=\"sendChat($event)\"></app-problem-communicator>\n</div>\n</div>\n</section>"
 
 /***/ }),
 
@@ -860,7 +889,6 @@ var ProblemEditorComponent = (function () {
         this.monitorStart();
     }
     ProblemEditorComponent.prototype.ngOnDestroy = function () {
-        console.log('logging out');
         this.monitorStop();
         this.commuSubject.complete();
         this.collaboration.deleteMyself();
@@ -984,6 +1012,9 @@ var ProblemEditorComponent = (function () {
     };
     ProblemEditorComponent.prototype.changeColor = function () {
         this.collaboration.updateColor(this.color);
+    };
+    ProblemEditorComponent.prototype.sendChat = function (data) {
+        this.collaboration.sendChat(data);
     };
     ProblemEditorComponent.prototype.submit = function () {
         var _this = this;
@@ -1492,6 +1523,14 @@ var CollaborationService = (function () {
             _this.clientsInfo[id] = { 'name': name, 'color': color };
             _this.problemEditor.commuSubject.next(['participants', 'addUser', user]);
         });
+        this.collaborationSocket.on('receiveChat', function (data) {
+            var info = JSON.parse(data);
+            if (info.id in _this.clientsInfo) {
+                info.name = _this.clientsInfo[info.id]['name'];
+                info.color = _this.clientsInfo[info.id]['color'];
+                _this.problemEditor.commuSubject.next(['messages', 'data', JSON.stringify(info)]);
+            }
+        });
         this.collaborationSocket.on('deleteUser', function (changeClientId) {
             var session = editor.getSession();
             if (changeClientId in _this.clientsInfo) {
@@ -1533,6 +1572,9 @@ var CollaborationService = (function () {
     };
     CollaborationService.prototype.updateUserName = function (user) {
         this.collaborationSocket.emit('updateUserName', user);
+    };
+    CollaborationService.prototype.sendChat = function (data) {
+        this.collaborationSocket.emit('sendChat', data);
     };
     CollaborationService.prototype.deleteMyself = function () {
         this.collaborationSocket.emit('deleteMyself');

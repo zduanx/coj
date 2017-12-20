@@ -100,6 +100,15 @@ export class CollaborationService {
       this.problemEditor.commuSubject.next(['participants', 'addUser', user]);
     });
 
+    this.collaborationSocket.on('receiveChat', (data: string)=>{
+      const info = JSON.parse(data);
+      if(info.id in this.clientsInfo){
+        info.name = this.clientsInfo[info.id]['name'];
+        info.color = this.clientsInfo[info.id]['color'];
+        this.problemEditor.commuSubject.next(['messages', 'data', JSON.stringify(info)]);
+      }
+    });
+
     this.collaborationSocket.on('deleteUser', (changeClientId: string) => {
       const session = editor.getSession();
 
@@ -158,6 +167,10 @@ export class CollaborationService {
 
   updateUserName(user: string){
     this.collaborationSocket.emit('updateUserName', user);
+  }
+
+  sendChat(data: string){
+    this.collaborationSocket.emit('sendChat', data);
   }
 
   deleteMyself(){

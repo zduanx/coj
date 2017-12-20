@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 @Component({
@@ -8,11 +8,15 @@ import { Observable } from 'rxjs/Observable';
 })
 export class ProblemCommunicatorComponent implements OnInit {
   @Input() observables: Observable<[string, string, string]>;
+  @Output() notify: EventEmitter<string> = new EventEmitter<string>();
 
   subscription: Subscription;
 
   userList: any = [];
   messageList: any = [];
+
+  chatWords: string = '';
+  clear: boolean = false;
 
   constructor() {}
 
@@ -51,11 +55,20 @@ export class ProblemCommunicatorComponent implements OnInit {
             }
             break;
           case 'messages':
+            this.updateChat(data);
             break;
           default:
         }
       }
     );
+  }
+
+  updateChat(data: string){
+    let info = JSON.parse(data);
+    let id = info.id;
+    let message = info.data;
+    console.log(info);
+
   }
 
   updateColor(data: string){
@@ -85,6 +98,23 @@ export class ProblemCommunicatorComponent implements OnInit {
     const index = idList.indexOf(data);
     if(index >= 0 ){
       this.userList.splice(index, 1);
+    }
+  }
+
+  sendChat(e: any){
+    if(e.charCode === 13 && !e.shiftKey){
+      let wordsToSend = this.chatWords.trim();
+      this.clear = true;
+      if(wordsToSend){
+        this.notify.emit(wordsToSend);
+      }
+    }
+  }
+  
+  clearChat(){
+    if(this.clear){
+      this.chatWords = '';
+      this.clear = false;
     }
   }
 

@@ -57,7 +57,6 @@ export class ProblemEditorComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    console.log('logging out');
     this.monitorStop();
     this.commuSubject.complete();
     this.collaboration.deleteMyself();
@@ -195,6 +194,11 @@ export class ProblemEditorComponent implements OnInit {
   changeColor(){
     this.collaboration.updateColor(this.color);
   }
+
+  sendChat(data: string){
+    this.collaboration.sendChat(data);
+  }
+
 
   submit(){
     if(!this.auth.isAuthenticated()){
