@@ -13,7 +13,6 @@ export class ProblemCommunicatorComponent implements OnInit {
   subscription: Subscription;
 
   userList: any = [];
-  messageList: any = [];
 
   chatWords: string = '';
   clear: boolean = false;
@@ -34,7 +33,7 @@ export class ProblemCommunicatorComponent implements OnInit {
         const type = val[0];
         const operation = val[1];
         const data = val[2];
-        console.log(val);
+        // console.log(val);
 
         switch(type){
           case 'participants':
@@ -64,12 +63,24 @@ export class ProblemCommunicatorComponent implements OnInit {
   }
 
   updateChat(data: string){
-    let info = JSON.parse(data);
-    let id = info.id;
-    let message = info.data;
-    console.log(info);
+    const info = JSON.parse(data);
+    const name = info.name;
+    const color = info.color;
+    const message = info.data;
+    const listParent: any = document.getElementById('chatList');
+    const chatParent: any = document.getElementById('chatDiv');
 
+    const entry = document.createElement('li');
+    const nameSpan = document.createElement('span');
+    nameSpan.style.color = color;
+    nameSpan.appendChild(document.createTextNode(name));
+    entry.appendChild(nameSpan);
+    entry.appendChild(document.createTextNode('\u00A0\u00A0'));
+    entry.appendChild(document.createTextNode(message));
+    listParent.appendChild(entry);
+    chatParent.scrollTop = chatParent.scrollHeight;
   }
+    // document.getElementById('chatDiv').scrollTop = document.getElementById('chatDiv').scrollHeight;}
 
   updateColor(data: string){
     let info = JSON.parse(data);
@@ -116,6 +127,10 @@ export class ProblemCommunicatorComponent implements OnInit {
       this.chatWords = '';
       this.clear = false;
     }
+  }
+
+  change(){
+    console.log(123123);
   }
 
 }

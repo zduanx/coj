@@ -570,7 +570,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".userList{\n    height: 200px;\n    overflow: auto;\n}\n\n.userColor{\n    width: 2.5em;\n    text-align: left;\n    white-space: nowrap;\n    overflow: hidden;\n    text-indent: -9999px;\n    border-radius: 1.25em;\n}\n\n.chat-line{\n    resize: none;\n}", ""]);
+exports.push([module.i, ".userList{\n    height: 200px;\n    overflow: auto;\n}\n\n.userColor{\n    width: 2.5em;\n    text-align: left;\n    white-space: nowrap;\n    overflow: hidden;\n    text-indent: -9999px;\n    border-radius: 1.25em;\n}\n\n.chat-line{\n    resize: none;\n}\n\n.chat-log{\n    height: 295px;\n    margin-bottom: 15px;\n    overflow: auto;\n    border: 3px;\n    word-wrap: break-word;\n}\n\n.chat-list{\n    padding-left: 0;\n    list-style-type: none;\n    margin-bottom: 10px;\n}", ""]);
 
 // exports
 
@@ -583,7 +583,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-communicator/problem-communicator.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-sm-12\">\n    <h3>Participants</h3>\n    <div *ngIf=\"userList\" class=\"userList\">\n      <ul class=\"list-group\">\n        <li class=\"list-group-item\" *ngFor=\"let user of userList\">\n          <span class=\"btn btn-default userColor\" [style.backgroundColor]=\"user.color\" >{{user.color}}</span>\n          <span>{{user.name}}</span>\n        </li>\n      </ul>\n    </div>\n  </div>\n\n  <div class=\"col-sm-12\">\n    <h3>Chat</h3>\n    <div class=\"row\">\n      <div class=\"col-sm-12\">\n        <div class=\"form-group\">\n          <textarea \n            [(ngModel)]=\"chatWords\"\n            class=\"chat-line form-control\" \n            placeholder=\"Type here to chat\" \n            rows=\"3\" \n            id=\"comment\" \n            (keypress)=\"sendChat($event)\"\n            (keyup)=\"clearChat()\">\n          </textarea>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"row\">\n  <div class=\"col-sm-12\">\n    <h3>Participants</h3>\n    <div *ngIf=\"userList\" class=\"userList\">\n      <ul class=\"list-group\">\n        <li class=\"list-group-item\" *ngFor=\"let user of userList\">\n          <span class=\"btn btn-default userColor\" [style.backgroundColor]=\"user.color\" >{{user.color}}</span>\n          <span>{{user.name}}</span>\n        </li>\n      </ul>\n    </div>\n  </div>\n\n  <div class=\"col-sm-12\">\n    <h3>Chat</h3>\n    <div class=\"form-control chat-log\" id=\"chatDiv\" (change)=\"change()\">\n      <ul class=\"chat-list\" id=\"chatList\">\n        <!-- <li *ngFor=\"let message of messageList\">\n          <span [style.color]=\"message.color\">{{message.name}}</span> &nbsp; &nbsp;\n          <span>{{message.data}}</span>\n        </li> -->\n        <!-- we use appendChild method to scroll to bottom promptly -->\n      </ul>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-sm-12\">\n        <div class=\"form-group\">\n          <textarea \n            [(ngModel)]=\"chatWords\"\n            class=\"chat-line form-control\" \n            placeholder=\"Type here to chat\" \n            rows=\"3\" \n            id=\"comment\" \n            (keypress)=\"sendChat($event)\"\n            (keyup)=\"clearChat()\">\n          </textarea>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -609,7 +609,6 @@ var ProblemCommunicatorComponent = (function () {
     function ProblemCommunicatorComponent() {
         this.notify = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["v" /* EventEmitter */]();
         this.userList = [];
-        this.messageList = [];
         this.chatWords = '';
         this.clear = false;
     }
@@ -625,7 +624,7 @@ var ProblemCommunicatorComponent = (function () {
             var type = val[0];
             var operation = val[1];
             var data = val[2];
-            console.log(val);
+            // console.log(val);
             switch (type) {
                 case 'participants':
                     switch (operation) {
@@ -653,10 +652,22 @@ var ProblemCommunicatorComponent = (function () {
     };
     ProblemCommunicatorComponent.prototype.updateChat = function (data) {
         var info = JSON.parse(data);
-        var id = info.id;
+        var name = info.name;
+        var color = info.color;
         var message = info.data;
-        console.log(info);
+        var listParent = document.getElementById('chatList');
+        var chatParent = document.getElementById('chatDiv');
+        var entry = document.createElement('li');
+        var nameSpan = document.createElement('span');
+        nameSpan.style.color = color;
+        nameSpan.appendChild(document.createTextNode(name));
+        entry.appendChild(nameSpan);
+        entry.appendChild(document.createTextNode('\u00A0\u00A0'));
+        entry.appendChild(document.createTextNode(message));
+        listParent.appendChild(entry);
+        chatParent.scrollTop = chatParent.scrollHeight;
     };
+    // document.getElementById('chatDiv').scrollTop = document.getElementById('chatDiv').scrollHeight;}
     ProblemCommunicatorComponent.prototype.updateColor = function (data) {
         var info = JSON.parse(data);
         var idList = this.userList.map(function (elem) { return elem.id; });
@@ -697,6 +708,9 @@ var ProblemCommunicatorComponent = (function () {
             this.chatWords = '';
             this.clear = false;
         }
+    };
+    ProblemCommunicatorComponent.prototype.change = function () {
+        console.log(123123);
     };
     __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["D" /* Input */])(),
@@ -836,7 +850,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-editor/problem-editor.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section>\n<div class=\"row\">\n\n<div class=\"col-md-6 col-sm-12\">\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n    <button class=\"btn btn-default btn-color\" [(colorPicker)]=\"color\"\n    [cpPosition]=\"'bottom'\"\n    [style.backgroundColor]=\"color\"\n    [cpPositionOffset]=\"'50%'\"\n    [cpPresetColors]=\"availableColors\"\n    [cpPositionRelativeToArrow]=\"true\"\n    [cpOKButton]=\"true\"\n    [cpSaveClickOutside]=\"false\"\n    [cpOKButtonClass]= \"'btn btn-primary btn-xs'\"\n    (colorPickerSelect)=\"changeColor()\">color</button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n    <h4>Build Results:</h4>\n    <div>\n      <p>{{buildoutput}}</p>\n      <p>{{runoutput}}</p>\n    </div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n  </footer>\n</div>\n\n<div class=\"col-sm-12 col-md-6\">\n  <app-problem-communicator [observables]=\"observables\" (notify)=\"sendChat($event)\"></app-problem-communicator>\n</div>\n</div>\n</section>"
+module.exports = "<section>\n<div class=\"row\">\n\n<div class=\"col-md-6 col-sm-12\">\n  <header class=\"editor-header\">\n    <select class=\"form-control pull-left option-select\" name=\"language\"\n    [(ngModel)]=\"language\" (change)=\"setLanguage()\">\n      <option *ngFor=\"let language of languages\" [value]=\"language\" >\n        {{language | capitalize}}\n      </option>\n    </select>\n\n    <select class=\"form-control pull-left option-select\" name=\"theme\"\n    [(ngModel)]=\"theme\" (change)=\"setTheme()\">\n      <option *ngFor=\"let theme of themes\" [value]=\"theme\">\n        {{theme | capitalize }}\n      </option>\n    </select>\n\n    <button type=\"button\" class=\"btn btn-default\" data-toggle=\"modal\" data-target=\"#myModal\">\n      <fa name=\"refresh\" size=\"1x\" ></fa>\n    </button>\n    <button class=\"btn btn-default btn-color\" [(colorPicker)]=\"color\"\n    [cpPosition]=\"'bottom'\"\n    [style.backgroundColor]=\"color\"\n    [cpPositionOffset]=\"'50%'\"\n    [cpPresetColors]=\"availableColors\"\n    [cpPositionRelativeToArrow]=\"true\"\n    [cpOKButton]=\"true\"\n    [cpSaveClickOutside]=\"false\"\n    [cpOKButtonClass]= \"'btn btn-primary btn-xs'\"\n    (colorPickerSelect)=\"changeColor()\">color</button>\n\n    <!-- Modal -->\n    <div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\">\n      <div class=\"modal-dialog\" role=\"document\">\n        <div class=\"modal-content\">\n          <div class=\"modal-body\">\n            You will lose current code in editor, are you sure?\n          </div>\n          <div class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary\" data-dismiss=\"modal\" (click)=\"resetPage()\">Reset</button>\n          </div>\n        </div>\n      </div>\n    </div>\n  </header>\n  \n\n  <div class=\"editor-css row\">\n    <div id=\"editor\"></div>\n  </div>\n  <footer class=\"editor-footer\">\n    <button type=\"button\" class = \"btn btn-success pull-right\"\n    (click)=\"submit()\">Submit Solution</button>\n    <h4>Build Results:</h4>\n    <div>\n      <p>{{buildoutput}}</p>\n      <p>{{runoutput}}</p>\n    </div>\n  </footer>\n</div>\n\n<div class=\"col-sm-12 col-md-6\">\n  <app-problem-communicator [observables]=\"observables\" (notify)=\"sendChat($event)\"></app-problem-communicator>\n</div>\n</div>\n</section>"
 
 /***/ }),
 
@@ -1075,7 +1089,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/components/problem-list/problem-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"jumbotron\">\n    <h2>Collaborative Online Judge System</h2>\n    <hr>\n    <p>{{loginInfo}}<p>\n    <p>{{sampleAccount}}<p>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-sm-9\">\n      <input class=\"form-control\" id=\"filterName\" [(ngModel)]=\"filterName\" placeholder=\"Search question titles\">\n    </div>\n\n    <div class=\"col-sm-3\">\n      <select class=\"form-control\" [(ngModel)]=\"filterDiff\">\n        <option value=\"\">Select Difficulty</option>\n        <option *ngFor=\"let difficulty of difficulties\" [value] = \"difficulty\">\n          {{difficulty}}\n        </option>>\n      </select>\n    </div>\n  </div>\n  <br>\n  <div class=\"list-group\">\n    <a class=\"list-group-item\" *ngFor=\"let problem of problems | problemListFilter:filterName:filterDiff\"\n       routerLink=\"/problems/{{problem.id}}\">\n      <span class=\"{{ 'pull-left label difficulty diff-' + problem.difficulty.toLowerCase() }}\">\n        {{ problem.difficulty }}\n      </span>\n      <strong class=\"title\"> {{ problem.id }} {{ problem.name}} </strong>\n      <!-- <span class=\"pull-right\" *ngIf=\"auth.isAuthenticated()\" (click)=\"deleteProblem($event, problem.id); false\"><fa name=\"trash-o\" size=\"2x\" ></fa></span> -->\n    </a>\n  </div>\n  <button routerLink=\"/new-problems\" class=\"btn btn-default\">Add Problem</button>\n</div>"
+module.exports = "<div class=\"container\">\n  <div class=\"jumbotron\">\n    <h2>Collaborative Online Judge System</h2>\n    <hr>\n    <p>{{loginInfo}}<p>\n    <p>{{sampleAccount}}<p>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-sm-9\">\n      <input class=\"form-control\" id=\"filterName\" [(ngModel)]=\"filterName\" placeholder=\"Search question titles\">\n    </div>\n\n    <div class=\"col-sm-3\">\n      <select class=\"form-control\" [(ngModel)]=\"filterDiff\">\n        <option value=\"\">Select Difficulty</option>\n        <option *ngFor=\"let difficulty of difficulties\" [value] = \"difficulty\">\n          {{difficulty}}\n        </option>>\n      </select>\n    </div>\n  </div>\n  <br>\n  <div class=\"list-group\">\n    <a class=\"list-group-item\" *ngFor=\"let problem of problems | problemListFilter:filterName:filterDiff\"\n       routerLink=\"/problems/{{problem.id}}\">\n      <span class=\"{{ 'pull-left label difficulty diff-' + problem.difficulty.toLowerCase() }}\">\n        {{ problem.difficulty }}\n      </span>\n      <strong class=\"title\"> {{ problem.id }} {{ problem.name}} </strong>\n    </a>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -1120,10 +1134,6 @@ var ProblemListComponent = (function () {
         // this.problems = this.dataService.getProblems();
         this.subscriptionProblems = this.dataService.getProblems()
             .subscribe(function (problems) { return _this.problems = problems; });
-    };
-    ProblemListComponent.prototype.deleteProblem = function (event, id) {
-        console.log("delete " + id);
-        return false;
     };
     ProblemListComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -1528,6 +1538,7 @@ var CollaborationService = (function () {
             if (info.id in _this.clientsInfo) {
                 info.name = _this.clientsInfo[info.id]['name'];
                 info.color = _this.clientsInfo[info.id]['color'];
+                delete info['id'];
                 _this.problemEditor.commuSubject.next(['messages', 'data', JSON.stringify(info)]);
             }
         });

@@ -105,6 +105,7 @@ export class CollaborationService {
       if(info.id in this.clientsInfo){
         info.name = this.clientsInfo[info.id]['name'];
         info.color = this.clientsInfo[info.id]['color'];
+        delete info['id'];
         this.problemEditor.commuSubject.next(['messages', 'data', JSON.stringify(info)]);
       }
     });

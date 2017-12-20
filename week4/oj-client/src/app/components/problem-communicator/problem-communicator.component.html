@@ -13,6 +13,15 @@
 
   <div class="col-sm-12">
     <h3>Chat</h3>
+    <div class="form-control chat-log" id="chatDiv" (change)="change()">
+      <ul class="chat-list" id="chatList">
+        <!-- <li *ngFor="let message of messageList">
+          <span [style.color]="message.color">{{message.name}}</span> &nbsp; &nbsp;
+          <span>{{message.data}}</span>
+        </li> -->
+        <!-- we use appendChild method to scroll to bottom promptly -->
+      </ul>
+    </div>
     <div class="row">
       <div class="col-sm-12">
         <div class="form-group">

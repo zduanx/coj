@@ -47,8 +47,4 @@ export class ProblemListComponent implements OnInit {
       .subscribe(problems => this.problems = problems);
   }
 
-  deleteProblem(event: any, id: number){
-    console.log("delete " + id);
-    return false;
-  }
 }
