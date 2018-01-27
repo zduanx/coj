@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="jumbotron">
+    <h2>Collaborative Online Judge System</h2>
+    <hr>
+    <p>{{loginInfo}}<p>
+    <p>{{sampleAccount}}<p>
+  </div>
+  <div class="row">
+    <div class="col-sm-9">
+      <input class="form-control" id="filterName" [(ngModel)]="filterName" placeholder="Search question titles">
+    </div>
+
+    <div class="col-sm-3">
+      <select class="form-control" [(ngModel)]="filterDiff">
+        <option value="">Select Difficulty</option>
+        <option *ngFor="let difficulty of difficulties" [value] = "difficulty">
+          {{difficulty}}
+        </option>>
+      </select>
+    </div>
+  </div>
+  <br>
+  <div class="list-group">
+    <a class="list-group-item" *ngFor="let problem of problems | problemListFilter:filterName:filterDiff"
+       routerLink="/problems/{{problem.id}}">
+      <span class="{{ 'pull-left label difficulty diff-' + problem.difficulty.toLowerCase() }}">
+        {{ problem.difficulty }}
+      </span>
+      <strong class="title"> {{ problem.id }} {{ problem.name}} </strong>
+    </a>
+  </div>
+</div>

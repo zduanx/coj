@@ -1,0 +1,25 @@
+<div class="container" *ngIf="problem">
+  <h2>
+    {{problem.id}}. {{problem.name}}
+  </h2>
+  <div class="{{ 'pull-left label diff-' + problem.difficulty.toLowerCase() }}">
+      {{ problem.difficulty }}
+  </div>
+  <br>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div>
+        <h2>Description
+        </h2>
+        <p>
+          {{problem.desc}}
+        </p>
+      </div>
+    </div>
+    <div class="hidden-xs col-sm-12">
+      <app-problem-editor></app-problem-editor>
+    </div>
+  </div>
+
+</div>

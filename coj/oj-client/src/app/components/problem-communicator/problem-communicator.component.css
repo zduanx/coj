@@ -1,0 +1,31 @@
+.userList{
+    height: 200px;
+    overflow: auto;
+}
+
+.userColor{
+    width: 2.5em;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-indent: -9999px;
+    border-radius: 1.25em;
+}
+
+.chat-line{
+    resize: none;
+}
+
+.chat-log{
+    height: 295px;
+    margin-bottom: 15px;
+    overflow: auto;
+    border: 3px;
+    word-wrap: break-word;
+}
+
+.chat-list{
+    padding-left: 0;
+    list-style-type: none;
+    margin-bottom: 10px;
+}

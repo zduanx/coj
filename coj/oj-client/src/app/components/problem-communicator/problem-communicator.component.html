@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h3>Participants</h3>
+    <div *ngIf="userList" class="userList">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let user of userList">
+          <span class="btn btn-default userColor" [style.backgroundColor]="user.color" >{{user.color}}</span>
+          <span>{{user.name}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-sm-12">
+    <h3>Chat</h3>
+    <div class="form-control chat-log" id="chatDiv" (change)="change()">
+      <ul class="chat-list" id="chatList">
+        <!-- <li *ngFor="let message of messageList">
+          <span [style.color]="message.color">{{message.name}}</span> &nbsp; &nbsp;
+          <span>{{message.data}}</span>
+        </li> -->
+        <!-- we use appendChild method to scroll to bottom promptly -->
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="form-group">
+          <textarea 
+            [(ngModel)]="chatWords"
+            class="chat-line form-control" 
+            placeholder="Type here to chat" 
+            rows="3" 
+            id="comment" 
+            (keypress)="sendChat($event)"
+            (keyup)="clearChat()">
+          </textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
