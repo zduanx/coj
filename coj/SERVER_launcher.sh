@@ -5,5 +5,3 @@ sudo service nginx start
 
 cd ./oj-server
 nodemon server.js &
-
-sudo service nginx stop

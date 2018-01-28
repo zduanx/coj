@@ -1,3 +1,7 @@
+sudo wget http://nginx.org/keys/nginx_signing.key
+
+sudo apt-key add nginx_signing.key
+
 (For ubuntu 16.04) Add following two lines into /etc/apt/sources.list
 
 deb http://nginx.org/packages/ubuntu/ xenial nginx
@@ -18,13 +22,17 @@ put following line in /etc/hosts
 
 -----------------------------------
 
-mkdir -p /etc/nginx/sites-available
-mkdir -p /etc/nginx/sites-enabled
+sudo /bin/mkdir -p /etc/nginx/sites-available;
+
+sudo /bin/mkdir -p /etc/nginx/sites-enabled
 
 copy file 'executor' to /etc/nginx/sites-available 
+
+sudo /bin/cp -f executor /etc/nginx/sites-available
+
 modify server list in /etc/nginx/sites-available/executor
 
-ln -s /etc/nginx/sites-available/executor /etc/nginx/sites-enabled/
+sudo /bin/ln -s /etc/nginx/sites-available/executor /etc/nginx/sites-enabled/
 
 modify last line in /etc/nginx/nginx.conf to
 include /etc/nginx/sites-enabled/*;
