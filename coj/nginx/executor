@@ -4,7 +4,7 @@ upstream executor {
 }
 
 server {
-  listen 80;
+  listen 5000;
   server_name executor;
   location / {
     proxy_pass http://executor;
