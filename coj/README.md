@@ -16,5 +16,8 @@ FOR EXECUTOR SERVER:
 # setup environment
 sudo bash EXEC_ENV.sh
 
+# need to re-login your system
+# to enable sudo docker mode
+
 # run server
 sudo bash EXEC_launcher.sh
