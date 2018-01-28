@@ -2,6 +2,8 @@
 
 fuser -k 5000/tcp
 
+sudo service docker start
+
 cd ./executor
 pip3 install -r requirements.txt
 

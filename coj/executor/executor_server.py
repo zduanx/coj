@@ -10,7 +10,7 @@ app = Flask(__name__)
 def hello():
     return 'hello world'
 
-@app.route('/build_and_run', methods=['POST'])
+@app.route('/buildresults', methods=['POST'])
 def build_and_run():
     data  = request.get_json()
     if 'code' not in data or 'lang' not in data:

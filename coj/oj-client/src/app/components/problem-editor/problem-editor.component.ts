@@ -217,7 +217,7 @@ export class ProblemEditorComponent implements OnInit {
     };
 
     // change to true after nginx configuration
-    this.submitDisable = false;
+    this.submitDisable = true;
     this.submitText = 'Please Wait...';
     this.dataService.buildAndRun(data)
       .then((res) => {
