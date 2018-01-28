@@ -57,6 +57,7 @@ export class ProblemEditorComponent implements OnInit {
   }
 
   ngOnDestroy(){
+    // console.log("editor destroyed");
     this.monitorStop();
     this.commuSubject.complete();
     this.collaboration.deleteMyself();
@@ -65,6 +66,7 @@ export class ProblemEditorComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.sessionId = params['id'];
+      // console.log(params['id']);
       this.initParam();
       this.initEditor();
       this.initSocket();

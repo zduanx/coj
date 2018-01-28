@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './auth.guard';
 
-import { ProblemDetailComponent } from './components/problem-detail/problem-detail.component';
-import { ProblemListComponent } from './components/problem-list/problem-list.component';
 import { NewProblemComponent } from './components/new-problem/new-problem.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ProblemDetailComponent } from './components/problem-detail/problem-detail.component';
+import { ProblemListComponent } from './components/problem-list/problem-list.component';
 import { ProfilesComponent } from './components/profiles/profiles.component';
+import { SocketDocsComponent } from './components/socket-docs/socket-docs.component'
+
 
 const routes: Routes = [
   {
@@ -27,6 +29,10 @@ const routes: Routes = [
   {
     path: 'problems/:id',
     component: ProblemDetailComponent
+  },
+  {
+    path: 'socketdocs/:id',
+    component: SocketDocsComponent
   },
   {
     path: 'new-problems',

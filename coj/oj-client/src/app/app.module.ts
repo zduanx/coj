@@ -25,6 +25,7 @@ import { AuthGuard } from './auth.guard';
 import { ProblemCommunicatorComponent } from './components/problem-communicator/problem-communicator.component';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { FooterComponent } from './components/footer/footer.component';
+import { SocketDocsComponent } from './components/socket-docs/socket-docs.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +39,8 @@ import { FooterComponent } from './components/footer/footer.component';
     ProblemEditorComponent,
     CapitalizePipe,
     ProblemCommunicatorComponent,
-    FooterComponent
+    FooterComponent,
+    SocketDocsComponent
   ],
   imports: [
     ColorPickerModule,
