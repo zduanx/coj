@@ -1,5 +1,8 @@
+const config = require('../config.json');
+const REDIS_URL = config.REDIS_URL;
+const REDIS_PORT = config.REDIS_PORT;
 const redis = require('redis');
-const client = redis.createClient(); 
+const client = redis.createClient({host: REDIS_URL, port: REDIS_PORT}); 
 
 function set(key, value, callback){
     client.set(key, value, function(err, res){
@@ -17,6 +20,7 @@ function get(key, callback){
             console.log(err);
             return;
         }
+        console.log(res);
         callback(res);
     });
 }

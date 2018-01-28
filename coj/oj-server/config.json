@@ -1,5 +1,4 @@
 {
-  "SERVER_PORT": 4200,
-  "REDIS_PORT": "1.0.0",
-  "REDIS_URL": "oj-server"
+  "REDIS_PORT": 6379,
+  "REDIS_URL": "coj.crryxn.0001.usw2.cache.amazonaws.com"
 }
