@@ -22,7 +22,6 @@ module.exports = function(io) {
             collaborations[sessionId]['participants'][sid] = {'name': '', 'color':''};
             io.to(socket.id).emit('langChange', collaborations[sessionId]['language']);
         } else{
-            console.log(111111);
             redisClient.get(sessionPath + '/' + sessionId, data =>{
                 if(data){
                     console.log('>> editorSocketService: session terminated previously, pulling back from redis for id:' + sessionId);
@@ -41,7 +40,6 @@ module.exports = function(io) {
                         'participants': {}
                     }
                 } 
-                console.log(222222);
                 collaborations[sessionId]['participants'][sid] = {'name': '', 'color':''};
                 io.to(socket.id).emit('langChange', collaborations[sessionId]['language']);
             })

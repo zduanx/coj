@@ -7,7 +7,6 @@ const client = redis.createClient({host: REDIS_URL, port: REDIS_PORT});
 function set(key, value, callback){
     client.set(key, value, function(err, res){
         if(err){
-            console.log(err);
             return;
         }
         callback(res);
