@@ -10,7 +10,7 @@ app = Flask(__name__)
 def hello():
     return 'hello world'
 
-@app.route('/buildresults', methods=['POST'])
+@app.route('/build_and_run', methods=['POST'])
 def build_and_run():
     data  = request.get_json()
     if 'code' not in data or 'lang' not in data:
@@ -31,4 +31,4 @@ if __name__ == '__main__':
     import executor_config
     port = executor_config.PORT
     eu.load_image()
-    app.run(port=port, debug=True)
+    app.run(port=port, debug=False)
