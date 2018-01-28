@@ -7,4 +7,7 @@ sudo apt-get install -y nodejs
 
 sudo npm install -g nodemon
 
-sudo apt-get install git
+cd oj-server
+npm install
+
+cd ..

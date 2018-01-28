@@ -19,7 +19,6 @@ function get(key, callback){
             console.log(err);
             return;
         }
-        console.log(res);
         callback(res);
     });
 }

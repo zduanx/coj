@@ -1,0 +1,12 @@
+upstream executor {
+  server server1_ip:5000;
+  server server2_ip:5000;
+}
+
+server {
+  listen 80;
+  server_name executor;
+  location / {
+    proxy_pass http://executor;
+  }
+}

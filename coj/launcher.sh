@@ -17,4 +17,4 @@ read -p "PRESS [enter] to terminate processes." PRESSKEY
 
 fuser -k 3000/tcp
 fuser -k 5000/tcp
-service redis_6379 stop
+#service redis_6379 stop

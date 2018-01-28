@@ -88,7 +88,6 @@ def build_and_run(code, lang):
     except ContainerError as e:
         result['run'] = str(e.stderr, 'utf-8')
 
-    print (log)
     print('source ran')
     shutil.rmtree(source_file_host_dir)
     return result

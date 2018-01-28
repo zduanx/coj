@@ -33,6 +33,9 @@ export class ProblemEditorComponent implements OnInit {
   buildoutput: string = '';
   runoutput: string = '';
 
+  submitDisable: boolean = false;
+  submitText: string = 'Submit Solution';
+
   user: string;
 
   availableColors = COLORS;
@@ -213,13 +216,21 @@ export class ProblemEditorComponent implements OnInit {
       lang: this.language.toLocaleLowerCase()
     };
 
+    // change to true after nginx configuration
+    this.submitDisable = false;
+    this.submitText = 'Please Wait...';
+    console.log('here.....');
     this.dataService.buildAndRun(data)
       .then((res) => {
         this.buildoutput = res.buildtext;
         this.runoutput = res.runtext;
+        this.submitDisable = false;
+        this.submitText = 'Submit Solution';
       })
-      .catch( err =>
-        window.alert(err)
-      );
+      .catch( err => {
+        window.alert(err);
+        this.submitDisable = false;
+        this.submitText = 'Submit Solution';
+      });
   }
 }

@@ -6,6 +6,10 @@ const jsonParser = bodyParser.json();
 const nodeRestClient = require('node-rest-client').Client;
 const restClient = new nodeRestClient();
 
+const config = require('../config.json');
+const EXECUTOR_SERVER_URL = config.EXECUTOR_SERVER_URL;
+const EXECUTOR_SERVER_PORT = config.EXECUTOR_SERVER_PORT;
+
 const clientErrorCheck = require('../middleware/clientErrorCheck');
 const expressJwt = require('express-jwt');
 const jwtCheck = expressJwt({
@@ -15,9 +19,11 @@ const jwtCheck = expressJwt({
     algorithms: ['RS256']
 });
 
-EXECUTOR_SERVER_URL = 'http://localhost:5000/buildresults';
+EXECUTOR_SERVER = 'http://' + EXECUTOR_SERVER_URL + ':' + EXECUTOR_SERVER_PORT + '/buildresults';
+// For nginx test
+// EXECUTOR_SERVER = 'http://localhost:5000/buildresults';
 
-restClient.registerMethod('build_and_run', EXECUTOR_SERVER_URL, 'POST');
+restClient.registerMethod('build_and_run', EXECUTOR_SERVER, 'POST');
 
 // get problems
 // no /vpi/v1 
@@ -64,6 +70,7 @@ router.post('/buildresults', [jsonParser, jwtCheck, clientErrorCheck], (req, res
         },
         (data, response) =>{
             // {build: ,run:}
+            // console.log(response);
             const buildtext = `Build output: ${data['build']}`;
             const runtext = `Execute output: ${data['run']}`;
             data['buildtext'] = buildtext;

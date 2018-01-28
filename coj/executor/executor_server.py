@@ -24,5 +24,11 @@ def build_and_run():
     return jsonify(result)
 
 if __name__ == '__main__':
+    # import sys
+    # port = int(sys.argv[1])
+    # eu.load_image()
+    # app.run(port=port, debug=True)
+    import executor_config
+    port = executor_config.PORT
     eu.load_image()
-    app.run(port=5000, debug=True)
+    app.run(port=port, debug=True)
