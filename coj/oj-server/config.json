@@ -1,0 +1,5 @@
+{
+  "SERVER_PORT": 4200,
+  "REDIS_PORT": "1.0.0",
+  "REDIS_URL": "oj-server"
+}
