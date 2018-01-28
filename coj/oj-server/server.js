@@ -5,7 +5,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 const io = socketIO();
 const editorSocketService = require('./services/editorSocketService')(io);
-const config = require('../config.json');
+const config = require('./config.json');
 const SERVER_PORT = config.SERVER_PORT;
 
 // connect mongoDB
